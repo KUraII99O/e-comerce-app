@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MoooImage from "../../assets/images/Mooo.png";
+import MoooImage from "../../assets/images/MoooImage.jpg";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -184,13 +184,13 @@ const SignUpForm = () => {
                       {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                     </div>
                   </div>
-                  <button className="mt-5 tracking-wide font-semibold bg-primary hover:bg-secondary text-gray-100 w-full py-4 rounded-lg">
+                  <button className="mt-5 tracking-wide font-semibold bg-blue-300 hover:bg-blue-500 text-gray-100 w-full py-4 rounded-lg">
                     {translate("sign_up")}
                   </button>
                 </form>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   {translate("have_account")}{" "}
-                  <Link to="/app/login">
+                  <Link to="/login">
                     <span className="text-blue-900 font-semibold">{translate("login")}</span>
                   </Link>
                 </p>

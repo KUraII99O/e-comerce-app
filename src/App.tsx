@@ -4,29 +4,33 @@ import Layout from './components/Layout';
 import HomePage from './pages/buyer/HomePage';
 import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
+import { AuthProvider } from './components/UserContext';
+import StoreSettingPage from './pages/StoreSettingPage';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        {/* Routes that use the Layout (with header and footer) */}
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <HomePage />
-            </Layout>
-          }
-        />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Routes that use the Layout (with header and footer) */}
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <HomePage />
+              </Layout>
+            }
+          />
 
-        {/* Routes that do not use the Layout (no header and footer) */}
-        <Route path="/login" element={<LogInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-
-        {/* Redirect to Home if no match */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+          {/* Routes that do not use the Layout (no header and footer) */}
+          <Route path="/login" element={<LogInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/managestores" element={<StoreSettingPage />} />
+          {/* Redirect to Home if no match */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 

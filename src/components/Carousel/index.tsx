@@ -4,7 +4,9 @@ const Ccarousel: React.FC = () => {
   return (
     <div className="h-60 sm:h-64 xl:h-80 2xl:h-96 ">
       <Carousel
-        onSlideChange={(index) => console.log("onSlideChange()", index)}
+        onSlideChange={(index) => {
+          // Removed console.log
+        }}
       >
         <img
           src="https://mobirise.com/extensions/commercem4/assets/images/gallery02.jpg"

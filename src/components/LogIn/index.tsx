@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import MoooImage from "../../assets/images/Mooo.png";
+import MoooImage from "../../assets/images/MoooImage.jpg";
 import { useTranslation } from "../Translator/Provider";
+import {
+  faEye as FaRegEye,
+  faEyeSlash as FaRegEyeSlash,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../UserContext";
 
 // Define the types for the props
 interface LogInProps {
@@ -15,6 +21,7 @@ const LogIn: React.FC<LogInProps> = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // State for password visibility
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get login function from context
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,14 +41,11 @@ const LogIn: React.FC<LogInProps> = ({ onLogin }) => {
       }
 
       const responseBody = await response.json();
-      localStorage.setItem("loggedInUser", JSON.stringify(responseBody.user));
-      onLogin();
+      login(responseBody.user); // Call login from context
       setErrorMessage("");
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      navigate("/");
     } catch (error) {
-      setErrorMessage(translate("login_error"));
+      setErrorMessage("Login failed");
     }
   };
 
@@ -104,50 +108,12 @@ const LogIn: React.FC<LogInProps> = ({ onLogin }) => {
                       className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600"
                     >
                       {isPasswordVisible ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3 12c0 3.866 4.478 9 9 9s9-5.134 9-9-4.478-9-9-9-9 5.134-9 9z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 12c0-1.104-.896-2-2-2s-2 .896-2 2 .896 2 2 2 2-.896 2-2z"
-                          />
-                        </svg>
+                        <FontAwesomeIcon icon={FaRegEye} className="w-5 h-5" />
                       ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
+                        <FontAwesomeIcon
+                          icon={FaRegEyeSlash}
                           className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3 12c0 3.866 4.478 9 9 9s9-5.134 9-9-4.478-9-9-9-9 5.134-9 9z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 12c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 21a9.021 9.021 0 01-7.5-4 9.021 9.021 0 017.5-4 9.021 9.021 0 017.5 4A9.021 9.021 0 0112 21z"
-                          />
-                        </svg>
+                        />
                       )}
                     </button>
                   </div>
@@ -156,7 +122,7 @@ const LogIn: React.FC<LogInProps> = ({ onLogin }) => {
                   )}
                   <div className="mb-12 pb-1 pt-1 text-center">
                     <button
-                      className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white bg-secondary hover:bg-primary"
+                      className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white bg-blue-300 hover:bg-blue-500"
                       type="submit"
                     >
                       {translate("login")}
@@ -166,7 +132,7 @@ const LogIn: React.FC<LogInProps> = ({ onLogin }) => {
                   <div className="flex items-center justify-between pb-6">
                     <p className="mb-0 mr-2"></p>
                     <Link
-                      to="/app/signup"
+                      to="/signup"
                       className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg- hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
                     >
                       {translate("register_account")}
