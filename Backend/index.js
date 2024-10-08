@@ -27,6 +27,7 @@ mongoose
 
  // Define User model
 const User = require("./models/User"); // Adjust path if needed
+const Store = require("./models/Store"); // Adjust path if needed
 
 // Predefined users array
 const adminhash = bcrypt.hashSync("adminpassword", 10);
@@ -40,6 +41,8 @@ const users = [
     Image: "https://picsum.photos/200/300",
   },
 ];
+const stores = [];
+
 
 app.get('/api/users', (req, res) => {
     res.json(users);
@@ -124,7 +127,105 @@ app.post("/api/login", async (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     }
   });
-  
+  ("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+  // Endpoint to add a store
+app.post("/api/stores", async (req, res) => {
+  try {
+    const newStore = new Store({ ...req.body });
+    await newStore.save(); // Save store to MongoDB
+
+    stores.push(newStore); // Add store to in-memory array (optional)
+
+    res.status(201).json({ message: "Store added successfully", store: newStore });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to get stores
+app.get("/api/stores", async (req, res) => {
+  try {
+    let stores = await Store.find();
+    const { storeId } = req.query;
+    let result;
+    if (storeId) {
+      result = stores.filter((store) => store.storeId === storeId);
+    } else {
+      result = stores; // Return all stores (in-memory)
+    }
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to edit a store
+app.put("/api/stores/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedStore = req.body;
+
+    const updatedStoreMongo = await Store.findOneAndUpdate({ id }, updatedStore, {
+      new: true,
+    });
+
+    const index = stores.findIndex((store) => store.id === id);
+    if (index !== -1) {
+      stores[index] = updatedStore; // Update in-memory store (optional)
+    }
+
+    res.json({
+      message: "Store data updated successfully",
+      store: updatedStoreMongo,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to delete a store
+app.delete("/api/stores/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Store.findOneAndDelete({ id }); // Delete from MongoDB
+
+    const index = stores.findIndex((store) => store.id === id);
+    if (index !== -1) {
+      const deletedStore = stores.splice(index, 1)[0]; // Delete from in-memory (optional)
+      res.json({ message: "Store deleted successfully", store: deletedStore });
+    } else {
+      res.status(404).json({ error: "Store not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to toggle store status
+app.put("/api/stores/:id/toggle-status", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let stores = await Store.find();
+    const store = stores.find((store) => store.id === id);
+    if (!store) {
+      return res.status(404).json({ error: "Store not found" });
+    }
+
+    // Toggle status
+    store.status = !store.status;
+    await store.save();
+
+    res.json({
+      message: "Store status toggled successfully",
+      store: store,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Start the server
 app.listen(PORT, () => {
