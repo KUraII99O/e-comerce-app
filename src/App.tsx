@@ -7,6 +7,7 @@ import SignUpPage from './pages/SignUpPage';
 import { AuthProvider } from './components/UserContext';
 import StoreSettingPage from './pages/StoreSettingPage';
 import { ManageStoreProvider } from './components/Stores/Provider';
+import EditStorePage from './pages/EditStorePage';
 
 const App: React.FC = () => {
   return (
@@ -27,6 +28,8 @@ const App: React.FC = () => {
             {/* Routes that do not use the Layout (no header and footer) */}
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/edit-store/:id" element={<EditStorePage />} />
+            <Route path="/add-store" element={<EditStorePage />} />
             <Route path="/managestores" element={<StoreSettingPage />} />
             
             {/* Redirect to Home if no match */}

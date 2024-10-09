@@ -44,15 +44,16 @@ export const ManageStoreProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  const editStore = async (id: string, updatedStore: Omit<Store, 'id'>) => {
-    try {
-      setStores(prevStores =>
-        prevStores.map(store => (store.id === id ? { ...store, ...updatedStore } : store))
-      );
-    } catch (error) {
-      console.error("Error editing store:", error);
-    }
-  };
+ const editStore = async (id: string, updatedStore: Omit<Store, 'id'>) => {
+  try {
+    const data = await StoreService.editStore(id, updatedStore); // Ensure your service supports editing
+    setStores(prevStores =>
+      prevStores.map(store => (store.id === id ? { ...store, ...data } : store)) // Use data from response
+    );
+  } catch (error) {
+    console.error("Error editing store:", error);
+  }
+};
 
   const toggleStoreStatus = async (id: string) => {
     try {

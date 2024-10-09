@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Store } from "../StoreService"; // Adjust the path as necessary
 import { useManageStore } from "../Provider";
+import { Link } from "react-router-dom";
+import { BsPencil } from "react-icons/bs";
+import { AiOutlineDelete } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const StoreSection = () => {
   const { stores, deleteStore, toggleStoreStatus } = useManageStore();
@@ -11,19 +15,22 @@ const StoreSection = () => {
     setShowAll(!showAll);
   };
 
-  const handleDeleteStore = (id: string) => {
-    deleteStore(id);
+  const handleDeleteConfirmation = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this store member?")) {
+      await handleDelete(id);
+    }
   };
 
-  const handleEditStore = (id: string) => {
-    // Here you can add your edit logic (e.g., open a modal for editing store)
-    console.log("Edit store with id:", id);
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteStore(id);
+      toast.success("Store deleted successfully!");
+    } catch (error) {
+      toast.error("An error occurred while deleting the store.");
+    }
   };
 
-  const handleCreateStore = () => {
-    // Open a modal or redirect to create store form
-    console.log("Create a new store");
-  };
+ 
 
   const categories = ["All", "Type", "Creation Date"];
 
@@ -31,16 +38,16 @@ const StoreSection = () => {
     <section>
       <div className="container mx-auto py-9 md:py-12 px-4 md:px-6 max-w-6xl">
         {/* Title and Create Store Button */}
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-2xl font-bold text-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+          <h3 className="text-2xl font-bold text-gray-800 mb-2 md:mb-0">
             <span className="text-indigo-600 text-4xl">Manage</span> Stores
           </h3>
-          <button
-            onClick={handleCreateStore}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+          <Link
+            to="/add-store"
+            className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-500 ml-2"
           >
-            Create Store
-          </button>
+            Add store
+          </Link>
         </div>
 
         {/* Category Filter */}
@@ -74,7 +81,7 @@ const StoreSection = () => {
         </div>
 
         {/* Store Cards */}
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
           {stores.slice(0, showAll ? stores.length : 8).map((store: Store) => (
             <article
               key={store.id}
@@ -102,31 +109,21 @@ const StoreSection = () => {
                     >
                       {store.status ? "Open" : "Closed"}
                     </button>
-                    <button
-                      onClick={() => handleEditStore(store.id)}
-                      className="rounded-lg bg-blue-500 px-4 py-1.5 text-white hover:bg-blue-600"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteStore(store.id)}
-                      className="rounded-lg bg-gray-500 px-4 py-1.5 text-white hover:bg-gray-600"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="h-5 w-5"
+
+                    <div className="flex items-center">
+                      <Link
+                        to={`/edit-store/${String(store.id)}`}
+                        className="text-blue-500 hover:underline flex items-center mr-2"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
+                        <BsPencil className="w-5 h-5 mr-1" />
+                      </Link>
+                      <button
+                        onClick={() => handleDeleteConfirmation(store.id)}
+                        className="text-red-500 hover:text-red-700 focus:outline-none flex items-center"
+                      >
+                        <AiOutlineDelete className="w-5 h-5 mr-1" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

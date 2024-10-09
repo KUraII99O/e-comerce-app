@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { readAndCompressImage } from 'browser-image-resizer';
 
-// Placeholder image for the default profile picture (you can replace this with an actual blank profile image URL)
 const defaultProfilePicture = "https://via.placeholder.com/150?text=Profile+Picture";
 
 interface ImageUploadProps {
   onImageUpload: (base64Image: string) => void;
   prefillImage?: string; // Optional prop to prefill with an existing image
+  defaultImageUrl?: string; // Optional default image URL
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, prefillImage }) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State to store selected image path
+const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, prefillImage, defaultImageUrl }) => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Use the prefillImage when the component mounts, or default to null
   useEffect(() => {
     if (prefillImage) {
       setSelectedImage(prefillImage);
@@ -28,18 +27,29 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, prefillImage }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("File input changed");
     const file = e.target.files?.[0];
+    console.log("Selected file:", file);
+  
     if (!file) return;
-
+  
+    if (!file.type.startsWith('image/')) {
+      console.error("Uploaded file is not an image");
+      return;
+    }
+  
     try {
       const compressedFile = await readAndCompressImage(file, imageConfig);
+      console.log("Compressed file:", compressedFile);
+  
       const blobURL = URL.createObjectURL(compressedFile);
+      console.log("Blob URL:", blobURL);
       setSelectedImage(blobURL);
-
+  
       const blob = await fetchBlobData(blobURL);
       const base64Data = await blobToBase64(blob);
-
-      // Call the onImageUpload function with the base64 image data
+      console.log("Base64 image data:", base64Data);
+  
       onImageUpload(base64Data);
     } catch (error) {
       console.error("Error handling file change:", error);
@@ -70,16 +80,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, prefillImage }
     });
   }
 
+  const clearImage = () => {
+    setSelectedImage(null);
+    onImageUpload(""); // Call onImageUpload with empty string or null if needed
+  };
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="relative">
-        {/* Display either the selected image, the prefill image, or the default profile picture */}
         <img
-          src={selectedImage || defaultProfilePicture}
+          src={selectedImage || defaultImageUrl || defaultProfilePicture}
           alt="Uploaded"
           className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"
         />
-        {/* Upload button, styled like a camera icon overlay */}
         <label
           htmlFor="uploadInput"
           className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-500 text-white rounded-full p-2 cursor-pointer shadow-lg"
@@ -107,9 +120,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, prefillImage }
         onChange={handleFileChange}
         className="hidden"
         id="uploadInput"
-        accept="image/jpeg"
+        accept="image/*" // Accept any image format
         capture="environment"
       />
+
+      {/* Clear button to reset the image */}
+      {selectedImage && (
+        <button onClick={clearImage} className="mt-2 bg-red-500 text-white rounded p-2">
+          Clear Image
+        </button>
+      )}
     </div>
   );
 };

@@ -10,7 +10,8 @@ export type Store = {
   registrationDate: string;
   status: boolean;
   userId: string;
-  image: string;
+  image?: string; // Optional field for image
+  storeType: string;
 };
 
 const StoreService = {
@@ -90,7 +91,7 @@ async function addStore(
 async function editStore(
   id: string,
   updatedStore: Omit<Store, "id" | "userId">
-): Promise<void> {
+): Promise<Store> { // Change the return type to Promise<Store>
   const loggedInUser = localStorage.getItem("loggedInUser");
   if (!loggedInUser) {
     throw new Error("User not logged in");
@@ -109,9 +110,15 @@ async function editStore(
       },
       body: JSON.stringify({ ...updatedStore, userId: user.id }),
     });
+
     if (!response.ok) {
       throw new Error("Failed to update store");
     }
+
+    // Assuming the API returns the updated store data
+    const updatedStoreData: Store = await response.json(); // Parse the response
+    return updatedStoreData; // Return the updated store data
+
   } catch (error) {
     console.error("Error updating store:", (error as Error).message);
     throw error;
@@ -149,15 +156,6 @@ async function toggleStoreStatus(id: string): Promise<Store> {
 
 // Delete a store
 async function deleteStore(id: string): Promise<void> {
-  const loggedInUser = localStorage.getItem("loggedInUser");
-  if (!loggedInUser) {
-    throw new Error("User not logged in");
-  }
-
-  const user = JSON.parse(loggedInUser);
-  if (!user || !user.id) {
-    throw new Error("User ID not found");
-  }
 
   try {
     const response = await fetch(`http://localhost:3000/api/stores/${id}`, {

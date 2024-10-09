@@ -10,22 +10,17 @@ const app = express();
 app.use(express.json()); // Body parsing middleware
 app.use(cors()); // Enable CORS
 
-
-
 const PORT = process.env.PORT || 3000;
-
 
 mongoose
   .connect(
     "mongodb+srv://farees:azertyU123@ecomerce.t0u3c.mongodb.net/ecomerce?retryWrites=true&w=majority&appName=ecomerce",
-    { connectTimeoutMS: 30000}
+    { connectTimeoutMS: 30000 }
   )
   .then(() => console.log("Connected to database"))
   .catch((err) => console.error("Error connecting to database", err));
 
-
-
- // Define User model
+// Define User model
 const User = require("./models/User"); // Adjust path if needed
 const Store = require("./models/Store"); // Adjust path if needed
 
@@ -43,21 +38,21 @@ const users = [
 ];
 const stores = [];
 
-
-app.get('/api/users', (req, res) => {
-    res.json(users);
-  });
-  
+app.get("/api/users", (req, res) => {
+  res.json(users);
+});
 
 // Register Route
 app.post("/api/register", async (req, res) => {
   const { email, password, username } = req.body;
-  
+
   // Check if user exists in memory (or eventually from DB)
   const userExists = users.some((u) => u.email === email);
 
   if (userExists) {
-    return res.status(400).json({ error: `User with email ${email} already exists` });
+    return res
+      .status(400)
+      .json({ error: `User with email ${email} already exists` });
   }
 
   // Hash password
@@ -95,45 +90,51 @@ app.post("/api/register", async (req, res) => {
 });
 
 app.post("/api/login", async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      // Check in-memory array first
-      const userInMemory = users.find((u) => u.email === email);
-      if (userInMemory) {
-        const isMatch = await bcrypt.compare(password, userInMemory.password);
-        if (isMatch) {
-          return res.status(200).json({
-            message: "Login successful (in memory)",
-            user: userInMemory,
-          });
-        }
-      }
-  
-      // If not found in-memory, check MongoDB
-      const userInMongoDB = await User.findOne({ email });
-      if (userInMongoDB) {
-        const isMatch = await bcrypt.compare(password, userInMongoDB.password);
-        if (isMatch) {
-          return res
-            .status(200)
-            .json({ message: "Login successful (MongoDB)", user: userInMongoDB });
-        }
-      }
-  
-      return res.status(400).json({ error: "Invalid email or password" });
-    } catch (err) {
-      console.error("Login failed:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  ("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+  const { email, password } = req.body;
 
-  // Endpoint to add a store
+  try {
+    // Check in-memory array first
+    const userInMemory = users.find((u) => u.email === email);
+    if (userInMemory) {
+      const isMatch = await bcrypt.compare(password, userInMemory.password);
+      if (isMatch) {
+        return res.status(200).json({
+          message: "Login successful (in memory)",
+          user: userInMemory,
+        });
+      }
+    }
+
+    // If not found in-memory, check MongoDB
+    const userInMongoDB = await User.findOne({ email });
+    if (userInMongoDB) {
+      const isMatch = await bcrypt.compare(password, userInMongoDB.password);
+      if (isMatch) {
+        return res
+          .status(200)
+          .json({ message: "Login successful (MongoDB)", user: userInMongoDB });
+      }
+    }
+
+    return res.status(400).json({ error: "Invalid email or password" });
+  } catch (err) {
+    console.error("Login failed:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+// Endpoint to add a store
+
 app.post("/api/stores", async (req, res) => {
   try {
-    const newStore = new Store({ ...req.body });
-    await newStore.save(); // Save store to MongoDB
+    // Create a new store with a custom id and other properties from req.body
+    const newStore = new Store({
+      id: uuidv4(), // Generate a new unique id for the store
+      ...req.body,   // Spread the other fields from the request body
+    });
+
+    await newStore.save(); // Save the store to MongoDB
 
     stores.push(newStore); // Add store to in-memory array (optional)
 
@@ -166,9 +167,13 @@ app.put("/api/stores/:id", async (req, res) => {
     const { id } = req.params;
     const updatedStore = req.body;
 
-    const updatedStoreMongo = await Store.findOneAndUpdate({ id }, updatedStore, {
-      new: true,
-    });
+    const updatedStoreMongo = await Store.findOneAndUpdate(
+      { id },
+      updatedStore,
+      {
+        new: true,
+      }
+    );
 
     const index = stores.findIndex((store) => store.id === id);
     if (index !== -1) {
@@ -184,16 +189,12 @@ app.put("/api/stores/:id", async (req, res) => {
   }
 });
 
-// Endpoint to delete a store
 app.delete("/api/stores/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-    await Store.findOneAndDelete({ id }); // Delete from MongoDB
-
-    const index = stores.findIndex((store) => store.id === id);
-    if (index !== -1) {
-      const deletedStore = stores.splice(index, 1)[0]; // Delete from in-memory (optional)
+    const deletedStore = await Store.findOneAndDelete({ id }); // Use findOneAndDelete
+    
+    if (deletedStore) {
       res.json({ message: "Store deleted successfully", store: deletedStore });
     } else {
       res.status(404).json({ error: "Store not found" });
@@ -225,7 +226,6 @@ app.put("/api/stores/:id/toggle-status", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // Start the server
 app.listen(PORT, () => {
