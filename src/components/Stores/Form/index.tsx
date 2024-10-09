@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ManageStoreContext } from "../Provider"; // Adjust import based on your context
-import { FaStore, FaImage } from "react-icons/fa";
+import {  FaImage } from "react-icons/fa";
 import { useTranslation } from "../../Translator/Provider";
 import ImageUpload from "../../ImageUpload";
 import { toast } from "react-toastify";

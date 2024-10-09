@@ -1,4 +1,3 @@
-import React from 'react'
 import EditStore from '../../components/Stores/Form'
 
 const EditStorePage = () => {

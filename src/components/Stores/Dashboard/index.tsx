@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Store } from "../StoreService"; // Adjust the path as necessary
 import { useManageStore } from "../Provider";
 import { Link } from "react-router-dom";
