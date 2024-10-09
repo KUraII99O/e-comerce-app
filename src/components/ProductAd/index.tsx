@@ -14,6 +14,27 @@ const ProductAd = () => {
             <p className="text-base lg:text-xl text-gray-800 dark:text-white mt-2">
               Save up to <span className="font-bold">50%</span>
             </p>
+            {/* "Shop Now" Link with Arrow */}
+            <a
+              href="#"
+              className="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-300 font-medium group"
+            >
+              Shop Now
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 ml-1 transform transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 12h14M12 5l7 7-7 7"
+                />
+              </svg>
+            </a>
           </div>
           <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end">
             <img
@@ -33,6 +54,27 @@ const ProductAd = () => {
             <p className="text-base lg:text-xl text-gray-800 dark:text-white">
               Save up to <span className="font-bold">30%</span>
             </p>
+            {/* "Shop Now" Link with Arrow */}
+            <a
+              href="#"
+              className="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-300 font-medium group"
+            >
+              Shop Now
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 ml-1 transform transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 12h14M12 5l7 7-7 7"
+                />
+              </svg>
+            </a>
           </div>
           <div className="flex justify-end md:absolute md:bottom-4 md:right-4 lg:bottom-0 lg:right-0">
             <img

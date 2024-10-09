@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaHeart, FaExchangeAlt, FaEye } from 'react-icons/fa'; // Icons for Wishlist, Compare, Quick View
 
 interface Product {
   id: number;
@@ -98,8 +99,8 @@ const DealsOfTheDay = () => {
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <header>
             <h3 className="text-2xl font-bold text-gray-800 hover:underline mb-4">
-          <span className="text-indigo-600 text-4xl">Deal</span>  Of The Day
-        </h3>
+              <span className="text-indigo-600 text-4xl">Deal</span> Of The Day
+            </h3>
           </header>
 
           <div className="mt-8">
@@ -108,25 +109,45 @@ const DealsOfTheDay = () => {
 
           <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 rounded-lg">
             {currentProducts.map((product) => (
-              <li key={product.id}>
-                <a href="#" className="group block overflow-hidden rounded-lg">
+              <li key={product.id} className="group relative">
+                <a href="#" className="block overflow-hidden rounded-lg">
                   <img
                     src={product.imageUrl}
                     alt={product.title}
                     className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
                   />
-                  <div className="relative bg-white pt-3">
-                    <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                      {product.title}
-                    </h3>
-                    <p className="mt-2">
-                      <span className="sr-only">Regular Price</span>
-                      <span className="tracking-wider text-gray-900">£{product.price.toFixed(2)} GBP</span>
-                      <span className="ml-2 text-red-500">-{product.discount}%</span>
-                    </p>
-                    <p className="mt-1 text-sm text-gray-500">Time Left: {Math.floor(remainingTime[product.id - 1] / 60)}m {remainingTime[product.id - 1] % 60}s</p>
+
+                  {/* Hover Content */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg">
+                      Add to Cart
+                    </button>
+                  </div>
+
+                  <div className="absolute top-3 right-3 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button className="bg-white p-2 rounded-full shadow hover:bg-gray-200 ml-2">
+                      <FaHeart className="text-red-500" />
+                    </button>
+                    <button className="bg-white p-2 rounded-full shadow hover:bg-gray-200 ml-2">
+                      <FaExchangeAlt className="text-gray-500" />
+                    </button>
+                    <button className="bg-white p-2 rounded-full shadow hover:bg-gray-200 ml-2">
+                      <FaEye className="text-gray-500" />
+                    </button>
                   </div>
                 </a>
+
+                <div className="relative bg-white pt-3">
+                  <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                    {product.title}
+                  </h3>
+                  <p className="mt-2">
+                    <span className="sr-only">Regular Price</span>
+                    <span className="tracking-wider text-gray-900">£{product.price.toFixed(2)} GBP</span>
+                    <span className="ml-2 text-red-500">-{product.discount}%</span>
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">Time Left: {Math.floor(remainingTime[product.id - 1] / 60)}m {remainingTime[product.id - 1] % 60}s</p>
+                </div>
               </li>
             ))}
           </ul>
