@@ -6,11 +6,11 @@ import OurStores from "../../components/OurStores";
 const HomePage = () => {
   return (
     <div>
-      
+      <OurStores />
       <ProductCard />
       <ProductAd />
       <DealsOfTheDay />
-      <OurStores />
+      
 
       
     </div>

@@ -7,8 +7,8 @@ export type Store = {
   ownerName: string;
   contactEmail: string;
   contactNumber: string;
-  registrationDate: string;
-  status: boolean;
+  coverImage?: string;
+  about: string;
   userId: string;
   image?: string; // Optional field for image
   storeType: string;
@@ -18,7 +18,6 @@ const StoreService = {
   fetchStores,
   addStore,
   editStore,
-  toggleStoreStatus,
   deleteStore,
 };
 
@@ -125,34 +124,7 @@ async function editStore(
   }
 }
 
-// Toggle store status (e.g., active/inactive)
-async function toggleStoreStatus(id: string): Promise<Store> {
-  const loggedInUser = localStorage.getItem("loggedInUser");
-  if (!loggedInUser) {
-    throw new Error("User not logged in");
-  }
 
-  const user = JSON.parse(loggedInUser);
-  if (!user || !user.id) {
-    throw new Error("User ID not found");
-  }
-
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/stores/${id}/toggle-status`,
-      {
-        method: "PUT",
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to toggle store status");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error toggling store status:", (error as Error).message);
-    throw error;
-  }
-}
 
 // Delete a store
 async function deleteStore(id: string): Promise<void> {

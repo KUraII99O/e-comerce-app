@@ -30,8 +30,6 @@ const StoreSection = () => {
     }
   };
 
- 
-
   const categories = ["All", "Type", "Creation Date"];
 
   return (
@@ -99,16 +97,12 @@ const StoreSection = () => {
                 <p className="mt-1 text-sm text-slate-400">{store.location}</p>
                 <div className="mt-3 flex items-end justify-between">
                   <div className="flex items-center space-x-1.5 text-sm">
-                    <button
-                      onClick={() => toggleStoreStatus(store.id)}
-                      className={`rounded-lg px-4 py-1.5 text-white ${
-                        store.status
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-red-500 hover:bg-red-600"
-                      }`}
+                    <Link
+                      to={`/store/${store.id}`}
+                      className="rounded-lg px-4 py-1.5 text-white bg-blue-500 hover:bg-blue-600"
                     >
-                      {store.status ? "Open" : "Closed"}
-                    </button>
+                      Visit Store
+                    </Link>
 
                     <div className="flex items-center">
                       <Link

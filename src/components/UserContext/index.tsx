@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 interface User {
   id: string;
-  name: string;
+  username: string;
+  email: string;
+  image: string;
   // Add any other user properties you need
 }
 

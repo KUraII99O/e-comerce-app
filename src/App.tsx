@@ -8,6 +8,7 @@ import { AuthProvider } from './components/UserContext';
 import StoreSettingPage from './pages/StoreSettingPage';
 import { ManageStoreProvider } from './components/Stores/Provider';
 import EditStorePage from './pages/EditStorePage';
+import StorePage from './pages/StorePage';
 
 const App: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             <Route path="/edit-store/:id" element={<EditStorePage />} />
             <Route path="/add-store" element={<EditStorePage />} />
             <Route path="/managestores" element={<StoreSettingPage />} />
+            <Route path="/store/:id" element={<StorePage />} />
             
             {/* Redirect to Home if no match */}
             <Route path="*" element={<Navigate to="/" />} />

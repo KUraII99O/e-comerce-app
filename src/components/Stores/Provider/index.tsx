@@ -55,15 +55,7 @@ export const ManageStoreProvider: React.FC<ProviderProps> = ({ children }) => {
   }
 };
 
-  const toggleStoreStatus = async (id: string) => {
-    try {
-      setStores(prevStores =>
-        prevStores.map(store => (store.id === id ? { ...store, status: !store.status } : store))
-      );
-    } catch (error) {
-      console.error("Error toggling store status:", error);
-    }
-  };
+  
 
   const deleteStore = async (id: string) => {
     try {
@@ -79,7 +71,6 @@ export const ManageStoreProvider: React.FC<ProviderProps> = ({ children }) => {
     addStore,
     editStore,
     deleteStore,
-    toggleStoreStatus
   };
 
   return (

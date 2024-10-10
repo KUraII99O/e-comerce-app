@@ -1,15 +1,16 @@
-import React from 'react'
-import SettingSideBar from '../../components/Stores/SettingSideBar'
-import StoreSection from '../../components/Stores/Dashboard'
+import SettingSideBar from "../../components/Stores/SettingSideBar";
+import StoreSection from "../../components/Stores/Dashboard";
+import NavBar from "../../components/Stores/Header";
+import StoreLayout from "../../components/Stores/StoreLayout";
 
 const StoreSettingPage = () => {
   return (
     <div>
-        <StoreSection />
-        <SettingSideBar />
-        
+      <StoreLayout>
+      <StoreSection />
+      </StoreLayout>
     </div>
-  )
-}
+  );
+};
 
-export default StoreSettingPage
+export default StoreSettingPage;

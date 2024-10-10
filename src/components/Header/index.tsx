@@ -17,10 +17,10 @@ import {
   Bars3Icon,
   MagnifyingGlassIcon,
   ShoppingBagIcon,
+  
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useAuth } from "../UserContext";
-import { Link } from "react-router-dom";
+import HomeNav from "../HomeNav";
 
 const navigation = {
   categories: [
@@ -154,8 +154,9 @@ const navigation = {
 
 const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth(); // Get the user from context
-  const isLoggedIn = Boolean(user); // Check if user is logged in
+
+  
+
   return (
     <div className="bg-white z-50">
       {/* Mobile menu */}
@@ -441,49 +442,7 @@ const Header: React.FC = () => {
                 </div>
               </PopoverGroup>
 
-              <div className="ml-auto flex items-center">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {isLoggedIn ? (
-                    <>
-                      <Link
-                        to="/profile" // Use Link to navigate
-                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        Profile
-                      </Link>
-                      <span
-                        aria-hidden="true"
-                        className="h-6 w-px bg-gray-200"
-                      />
-                      <Link
-                        to="/managestores" // Use Link to navigate
-                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        Your Stores
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        to="/login" // Use Link to navigate
-                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        Sign in
-                      </Link>
-                      <span
-                        aria-hidden="true"
-                        className="h-6 w-px bg-gray-200"
-                      />
-                      <Link
-                        to="/signup" // Use Link to navigate
-                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        Create account
-                      </Link>
-                    </>
-                  )}
-                </div>
-
+              <HomeNav />
                 <div className="hidden lg:ml-8 lg:flex">
                   <a
                     href="#"
@@ -525,7 +484,7 @@ const Header: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          
         </nav>
       </header>
     </div>

@@ -8,6 +8,7 @@ interface Product {
   price: number;
   discount: number; // Discount percentage
   timer: number; // Timer in seconds
+  rating: number; // Timer in seconds
 }
 
 const products: Product[] = [
@@ -18,6 +19,7 @@ const products: Product[] = [
     price: 24.00,
     discount: 20,
     timer: 3600, // 1 hour
+    rating: 4, // 1 hour
   },
   {
     id: 2,
@@ -26,6 +28,7 @@ const products: Product[] = [
     price: 22.00,
     discount: 15,
     timer: 3600, // 1 hour
+    rating: 4, // 1 hour
   },
   {
     id: 3,
@@ -34,6 +37,7 @@ const products: Product[] = [
     price: 26.00,
     discount: 10,
     timer: 3600, // 1 hour
+    rating: 4, // 1 hour
   },
   {
     id: 4,
@@ -42,6 +46,7 @@ const products: Product[] = [
     price: 20.00,
     discount: 25,
     timer: 3600, // 1 hour
+    rating: 4, // 1 hour
   },
   {
     id: 5,
@@ -50,6 +55,7 @@ const products: Product[] = [
     price: 20.00,
     discount: 25,
     timer: 3600, // 1 hour
+    rating: 4, // 1 hour
   },
   {
     id: 6,
@@ -58,6 +64,7 @@ const products: Product[] = [
     price: 20.00,
     discount: 25,
     timer: 3600, // 1 hour
+    rating: 4, // 1 hour
   },
   // Add more products as needed
 ];
@@ -91,6 +98,25 @@ const DealsOfTheDay = () => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const renderStars = (rating: number) => {
+    const totalStars = 5;
+    return (
+      <div className="flex">
+        {Array.from({ length: totalStars }, (_, index) => (
+          <svg
+            key={index}
+            xmlns="http://www.w3.org/2000/svg"
+            className={`w-5 h-5 ${index < rating ? 'text-yellow-500' : 'text-gray-300'}`}
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.947a1 1 0 00.95.69h4.146c.969 0 1.371 1.24.588 1.81l-3.36 2.44a1 1 0 00-.363 1.118l1.287 3.947c.3.921-.755 1.688-1.54 1.118l-3.36-2.44a1 1 0 00-1.175 0l-3.36 2.44c-.784.57-1.839-.197-1.54-1.118l1.287-3.947a1 1 0 00-.363-1.118L2.464 9.374c-.784-.57-.38-1.81.588-1.81h4.146a1 1 0 00.95-.69l1.286-3.947z" />
+          </svg>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -146,6 +172,10 @@ const DealsOfTheDay = () => {
                     <span className="tracking-wider text-gray-900">£{product.price.toFixed(2)} GBP</span>
                     <span className="ml-2 text-red-500">-{product.discount}%</span>
                   </p>
+
+                  <div className="mt-1">{renderStars(product.rating)}</div>
+
+
                   <p className="mt-1 text-sm text-gray-500">Time Left: {Math.floor(remainingTime[product.id - 1] / 60)}m {remainingTime[product.id - 1] % 60}s</p>
                 </div>
               </li>

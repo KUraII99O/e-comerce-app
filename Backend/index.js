@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 const app = express();
 
 // Middleware
-app.use(express.json()); // Body parsing middleware
+app.use(express.json({ limit: "10mb" })); // Set JSON payload limit to 10MB
+app.use(express.urlencoded({ limit: "10mb", extended: true })); // Set URL-encoded payload limit to 10MB
 app.use(cors()); // Enable CORS
 
 const PORT = process.env.PORT || 3000;
@@ -131,20 +132,35 @@ app.post("/api/stores", async (req, res) => {
     // Create a new store with a custom id and other properties from req.body
     const newStore = new Store({
       id: uuidv4(), // Generate a new unique id for the store
-      ...req.body,   // Spread the other fields from the request body
+      ...req.body, // Spread the other fields from the request body
     });
 
     await newStore.save(); // Save the store to MongoDB
 
     stores.push(newStore); // Add store to in-memory array (optional)
 
-    res.status(201).json({ message: "Store added successfully", store: newStore });
+    res
+      .status(201)
+      .json({ message: "Store added successfully", store: newStore });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Endpoint to get stores
+app.get("/api/stores/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const store = await Store.findOne({ id }); // Find the store by its ID
+    if (!store) {
+      return res.status(404).json({ error: "Store not found" });
+    }
+    res.json(store); // Send the store data as a response
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get("/api/stores", async (req, res) => {
   try {
     let stores = await Store.find();
@@ -193,7 +209,7 @@ app.delete("/api/stores/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedStore = await Store.findOneAndDelete({ id }); // Use findOneAndDelete
-    
+
     if (deletedStore) {
       res.json({ message: "Store deleted successfully", store: deletedStore });
     } else {

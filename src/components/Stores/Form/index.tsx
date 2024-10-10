@@ -1,35 +1,39 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ManageStoreContext } from "../Provider"; // Adjust import based on your context
-import {  FaImage } from "react-icons/fa";
 import { useTranslation } from "../../Translator/Provider";
 import ImageUpload from "../../ImageUpload";
 import { toast } from "react-toastify";
+import CoverImageUpload from "../../CoverPhotoUplod";
+import LinkSection from "../Dashboard/TableLinks";
 
 const EditStore = () => {
   const { id } = useParams<{ id: string }>();
   const { stores, addStore, editStore } = useContext(ManageStoreContext);
-  const { translate, language } = useTranslation();
+  const { translate } = useTranslation();
   const navigate = useNavigate();
   const isEditMode = !!id;
 
   const [formData, setFormData] = useState({
     storeName: "",
+    about: "",
+    coverImage: "", // Fixed typo here
     location: "",
     storeType: "",
     ownerName: "",
     contactEmail: "",
     contactNumber: "",
-    status: "true",
-    registrationDate: "",
     image: "",
   });
 
   const [loading, setLoading] = useState(false); // Define loading state
 
   useEffect(() => {
-    if (isEditMode && id && stores.length > 0) {
-      const selectedStore = stores.find((item: { id: string }) => item.id === id);
+    if (isEditMode && id && stores?.length > 0) {
+      // Optional chaining for safety
+      const selectedStore = stores.find(
+        (item: { id: string }) => item.id === id
+      );
       if (selectedStore) {
         // Set form data including the image field
         setFormData({
@@ -40,20 +44,30 @@ const EditStore = () => {
   }, [id, isEditMode, stores]);
 
   const handleImageUpload = (imageData: string) => {
-    setFormData({
-      ...formData,
+    console.log("Profile image uploaded:", imageData); // Debugging line
+    setFormData((prevData) => ({
+      ...prevData,
       image: imageData,
-    });
+    }));
   };
 
+  const handleCoverImageUpload = (coverImageData: string) => {
+    console.log("Cover image uploaded:", coverImageData); // Debugging line
+    setFormData((prevData) => ({
+      ...prevData,
+      coverImage: coverImageData,
+    }));
+  };
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,16 +78,16 @@ const EditStore = () => {
       if (isEditMode) {
         await editStore(id, formData);
         toast.success("Store updated successfully!");
-        navigate("/managestores?result=success");
       } else {
         await addStore(formData);
         toast.success("Store added successfully!");
-        navigate("/managestores?result=success");
       }
+      navigate("/managestores?result=success");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("An error occurred while saving the store.");
-      setLoading(false);
+    } finally {
+      setLoading(false); // Moved here to ensure it's reset on completion
     }
   };
 
@@ -104,6 +118,48 @@ const EditStore = () => {
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
+          </div>
+          <div className="col-span-full">
+            <label
+              htmlFor="about"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              About
+            </label>
+            <div className="mt-2">
+              <textarea
+                name="about"
+                value={formData.about}
+                onChange={handleChange}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div className="col-span-full">
+            <label
+              htmlFor="profile-photo"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Profile Photo
+            </label>
+            <ImageUpload
+              onImageUpload={handleImageUpload} // Correctly handling image uploads
+              prefillImage={formData.image} // Prefilling with existing image
+            />
+          </div>
+
+          <div className="col-span-full">
+            <label
+              htmlFor="cover-photo"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Cover Photo
+            </label>
+            <CoverImageUpload
+              onCoverImageUpload={handleCoverImageUpload} // Correctly handling cover image uploads
+              prefillCoverImage={formData.coverImage} // Prefilling with existing cover image
+            />
           </div>
 
           <div className="sm:col-span-3">
@@ -190,7 +246,7 @@ const EditStore = () => {
               htmlFor="contactNumber"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              Contact Number
+              Phone Number
             </label>
             <div className="mt-2">
               <input
@@ -203,59 +259,13 @@ const EditStore = () => {
               />
             </div>
           </div>
-
-          <div className="sm:col-span-2">
-            <label
-              htmlFor="status"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Status
-            </label>
-            <div className="mt-2">
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                required
-              >
-                <option value="true">{translate("active")}</option>
-                <option value="false">{translate("inactive")}</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="sm:col-span-2">
-            <label
-              htmlFor="registrationDate"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Registration Date
-            </label>
-            <div className="mt-2">
-              <input
-                type="date"
-                name="registrationDate"
-                value={formData.registrationDate}
-                onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="col-span-2 mb-4">
-            <label className="text-xl font-bold mt-4 flex items-center">
-              <FaImage className={`mr-2 ${language === "ar" ? "ml-2" : ""}`} />
-              {translate("storeImages")}:
-            </label>
-            <ImageUpload onImageUpload={handleImageUpload} prefillImage={""} />
-          </div>
+          <LinkSection/>
         </div>
+
 
         <button
           type="submit"
-          className="bg-blue-300 text-white px-6 py-2 rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          className="bg-blue-300 mt-4 text-white px-6 py-2 rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           disabled={loading}
         >
           {isEditMode ? translate("update") : translate("add")}
