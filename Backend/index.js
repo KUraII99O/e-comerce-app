@@ -5,7 +5,8 @@ const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const app = express();
-
+const jwt = require("jsonwebtoken"); // Import the jsonwebtoken package
+const secretKey = "azertyU123"; // Replace with your own secret key
 // Middleware
 app.use(express.json({ limit: "10mb" })); // Set JSON payload limit to 10MB
 app.use(express.urlencoded({ limit: "10mb", extended: true })); // Set URL-encoded payload limit to 10MB
@@ -94,18 +95,6 @@ app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check in-memory array first
-    const userInMemory = users.find((u) => u.email === email);
-    if (userInMemory) {
-      const isMatch = await bcrypt.compare(password, userInMemory.password);
-      if (isMatch) {
-        return res.status(200).json({
-          message: "Login successful (in memory)",
-          user: userInMemory,
-        });
-      }
-    }
-
     // If not found in-memory, check MongoDB
     const userInMongoDB = await User.findOne({ email });
     if (userInMongoDB) {
@@ -114,6 +103,25 @@ app.post("/api/login", async (req, res) => {
         return res
           .status(200)
           .json({ message: "Login successful (MongoDB)", user: userInMongoDB });
+      }
+    }
+    // Check in-memory array first
+    const userInMemory = users.find((u) => u.email === email);
+    if (userInMemory) {
+      const isMatch = await bcrypt.compare(password, userInMemory.password);
+      if (isMatch) {
+        // Create the JWT token with user data (e.g., email, id) and sign it with the secret key
+        const token = jwt.sign(
+          { email: userInMemory.email, id: userInMemory.id }, // Payload (you can include other fields as needed)
+          secretKey, // Secret key for signing the token
+          { expiresIn: "1h" } // Token expiration time (optional)
+        );
+
+        return res.status(200).json({
+          message: "Login successful (in memory)",
+          user: userInMemory,
+          token: token, // Return the token
+        });
       }
     }
 
@@ -164,10 +172,10 @@ app.get("/api/stores/:id", async (req, res) => {
 app.get("/api/stores", async (req, res) => {
   try {
     let stores = await Store.find();
-    const { storeId } = req.query;
+    const { userId } = req.query;
     let result;
-    if (storeId) {
-      result = stores.filter((store) => store.storeId === storeId);
+    if (userId) {
+      result = stores.filter((store) => store.userId === userId);
     } else {
       result = stores; // Return all stores (in-memory)
     }

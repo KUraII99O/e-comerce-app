@@ -21,6 +21,7 @@
     "browser-image-resizer": "^2.4.1",
     "cors": "^2.8.5",
     "flowbite-react": "^0.10.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0",
     "react": "^18.3.1",

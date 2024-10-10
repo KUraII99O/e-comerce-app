@@ -34,9 +34,7 @@ async function fetchStores(): Promise<Store[]> {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/stores?userId=${user.id}`
-    );
+    const response = await fetch('http://localhost:3000/api/stores?userId=' + user.id);
     if (!response.ok) {
       throw new Error("Failed to fetch store data");
     }

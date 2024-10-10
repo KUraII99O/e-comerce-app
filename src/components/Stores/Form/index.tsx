@@ -5,7 +5,7 @@ import { useTranslation } from "../../Translator/Provider";
 import ImageUpload from "../../ImageUpload";
 import { toast } from "react-toastify";
 import CoverImageUpload from "../../CoverPhotoUplod";
-import LinkSection from "../Dashboard/TableLinks";
+import LinkSection from "../TableLinks";
 
 const EditStore = () => {
   const { id } = useParams<{ id: string }>();
@@ -176,7 +176,7 @@ const EditStore = () => {
                 value={formData.location}
                 onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                required
+                
               />
             </div>
           </div>
@@ -194,7 +194,7 @@ const EditStore = () => {
                 value={formData.storeType}
                 onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                required
+                
               >
                 <option value="">{translate("select")}</option>
                 <option value="Grocery">{translate("grocery")}</option>
@@ -219,7 +219,7 @@ const EditStore = () => {
                 value={formData.ownerName}
                 onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                required
+                
               />
             </div>
           </div>
@@ -237,7 +237,7 @@ const EditStore = () => {
               value={formData.contactEmail}
               onChange={handleChange}
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              required
+              
             />
           </div>
 
@@ -255,7 +255,7 @@ const EditStore = () => {
                 value={formData.contactNumber}
                 onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                required
+                
               />
             </div>
           </div>
