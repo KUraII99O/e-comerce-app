@@ -39,33 +39,7 @@ const products: Product[] = [
     timer: 3600, // 1 hour
     rating: 4, // 1 hour
   },
-  {
-    id: 4,
-    title: "Basic Tee - Green",
-    imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-    price: 20.00,
-    discount: 25,
-    timer: 3600, // 1 hour
-    rating: 4, // 1 hour
-  },
-  {
-    id: 5,
-    title: "Basic Tee - Green",
-    imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-    price: 20.00,
-    discount: 25,
-    timer: 3600, // 1 hour
-    rating: 4, // 1 hour
-  },
-  {
-    id: 6,
-    title: "Basic Tee - Green",
-    imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-    price: 20.00,
-    discount: 25,
-    timer: 3600, // 1 hour
-    rating: 4, // 1 hour
-  },
+  
   // Add more products as needed
 ];
 

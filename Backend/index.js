@@ -22,9 +22,26 @@ mongoose
   .then(() => console.log("Connected to database"))
   .catch((err) => console.error("Error connecting to database", err));
 
+
+
+  // Utility function to generate a JWT token
+const generateToken = (user) => {
+  return jwt.sign(
+    { email: user.email, id: user.id },
+    secretKey,
+    { expiresIn: '1h' }
+  );
+};
+
+// Utility function to check password
+const checkPassword = async (inputPassword, storedPassword) => {
+  return await bcrypt.compare(inputPassword, storedPassword);
+};
+
 // Define User model
 const User = require("./models/User"); // Adjust path if needed
 const Store = require("./models/Store"); // Adjust path if needed
+const Product = require("./models/Product"); // Adjust path if needed
 
 // Predefined users array
 const adminhash = bcrypt.hashSync("adminpassword", 10);
@@ -95,40 +112,34 @@ app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // If not found in-memory, check MongoDB
-    const userInMongoDB = await User.findOne({ email });
-    if (userInMongoDB) {
-      const isMatch = await bcrypt.compare(password, userInMongoDB.password);
-      if (isMatch) {
-        return res
-          .status(200)
-          .json({ message: "Login successful (MongoDB)", user: userInMongoDB });
-      }
-    }
-    // Check in-memory array first
-    const userInMemory = users.find((u) => u.email === email);
-    if (userInMemory) {
-      const isMatch = await bcrypt.compare(password, userInMemory.password);
-      if (isMatch) {
-        // Create the JWT token with user data (e.g., email, id) and sign it with the secret key
-        const token = jwt.sign(
-          { email: userInMemory.email, id: userInMemory.id }, // Payload (you can include other fields as needed)
-          secretKey, // Secret key for signing the token
-          { expiresIn: "1h" } // Token expiration time (optional)
-        );
+    // Check in-memory or MongoDB for the user
+    const user = users.find((u) => u.email === email) || await User.findOne({ email });
+    
+    let responseMessage = { error: "Invalid email or password" };
+    let statusCode = 400;
 
-        return res.status(200).json({
-          message: "Login successful (in memory)",
-          user: userInMemory,
-          token: token, // Return the token
-        });
+    if (user) {
+      // Check if the password matches
+      const isMatch = await checkPassword(password, user.password);
+      if (isMatch) {
+        // Generate token and prepare successful login response
+        const token = generateToken(user);
+
+        responseMessage = {
+          message: `Login successful (${user.hasOwnProperty('id') ? 'MongoDB' : 'in memory'})`,
+          user: user,
+          token: token,
+        };
+        statusCode = 200;
       }
     }
 
-    return res.status(400).json({ error: "Invalid email or password" });
-  } catch (err) {
-    console.error("Login failed:", err);
-    res.status(500).json({ error: "Internal server error" });
+    // Return final response
+    return res.status(statusCode).json(responseMessage);
+
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 ("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -250,6 +261,95 @@ app.put("/api/stores/:id/toggle-status", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+// Endpoint to add a product
+app.post("/api/products", async (req, res) => {
+  try {
+    // Create a new product with a custom id and other properties from req.body
+    const newProduct = new Product({
+      id: uuidv4(), // Generate a new unique id for the product
+      ...req.body, // Spread the other fields from the request body
+    });
+
+    await newProduct.save(); // Save the product to MongoDB
+
+    res.status(201).json({ message: "Product added successfully", product: newProduct });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to get a specific product by id
+app.get("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findOne({ id }); // Find the product by its ID
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product); // Send the product data as a response
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to get all products or filter by userId
+app.get("/api/products", async (req, res) => {
+  try {
+    let products = await Product.find();
+    const { userId } = req.query;
+    let result;
+    if (userId) {
+      result = products.filter((product) => product.userId === userId);
+    } else {
+      result = products; // Return all products
+    }
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to edit a product
+app.put("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedProduct = req.body;
+
+    const updatedProductMongo = await Product.findOneAndUpdate(
+      { id },
+      updatedProduct,
+      {
+        new: true,
+      }
+    );
+
+    res.json({
+      message: "Product data updated successfully",
+      product: updatedProductMongo,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to delete a product
+app.delete("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedProduct = await Product.findOneAndDelete({ id }); // Use findOneAndDelete
+
+    if (deletedProduct) {
+      res.json({ message: "Product deleted successfully", product: deletedProduct });
+    } else {
+      res.status(404).json({ error: "Product not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Start the server
 app.listen(PORT, () => {

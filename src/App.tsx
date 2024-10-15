@@ -9,10 +9,15 @@ import StoreSettingPage from './pages/StoreSettingPage';
 import { ManageStoreProvider } from './components/Stores/Provider';
 import EditStorePage from './pages/EditStorePage';
 import StorePage from './pages/StorePage';
+import ConractStorePage from './pages/ConractStorePage';
+import AddProductPage from './pages/seller/AddProductPage';
+import { ManageProductProvider } from './components/Products/Provider';
 
 const App: React.FC = () => {
   return (
     <ManageStoreProvider>
+    <ManageProductProvider>
+      
       <AuthProvider>
         <Router>
           <Routes>
@@ -33,12 +38,15 @@ const App: React.FC = () => {
             <Route path="/add-store" element={<EditStorePage />} />
             <Route path="/managestores" element={<StoreSettingPage />} />
             <Route path="/store/:id" element={<StorePage />} />
+            <Route path="/contactstore" element={<ConractStorePage />} />
+            <Route path="/addproduct" element={<AddProductPage />} />
             
             {/* Redirect to Home if no match */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Router>
       </AuthProvider>
+    </ManageProductProvider>
     </ManageStoreProvider>
   );
 };
