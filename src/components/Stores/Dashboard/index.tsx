@@ -7,7 +7,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 
 const StoreSection = () => {
-  const { stores, deleteStore, toggleStoreStatus } = useManageStore();
+  const { stores, deleteStore,  } = useManageStore();
   const [showAll, setShowAll] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import ConractStore from '../../components/Store/ConractStore'
 
 const ConractStorePage = () => {

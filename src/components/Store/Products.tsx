@@ -47,7 +47,7 @@ const StoreProductSection: React.FC = () => {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [sort, setSort] = useState<string>("asc");
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage] = useState<number>(1);
 
   // Sort products by price
   const sortedProducts = [...productsData].sort((a, b) => {
