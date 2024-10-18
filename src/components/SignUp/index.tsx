@@ -13,15 +13,14 @@ const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [userType, setUserType] = useState("buyer"); // New state for user type
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const navigate = useNavigate(); // Use the useNavigate hook
+  const navigate = useNavigate();
   const location = useLocation();
   const { plan } = location.state || {};
   
-
-
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
     if (!mobile.trim()) {
@@ -60,6 +59,7 @@ const SignUpForm = () => {
             email,
             password,
             planId: plan?.id,
+            userType, // Add user type to form submission
           }),
         });
 
@@ -71,8 +71,7 @@ const SignUpForm = () => {
         }
 
         const data = await response.json();
-        console.log(data.message); // Print success message or handle it as needed
-        console.log({ email, password });
+        console.log(data.message); 
         setTimeout(() => {
           navigate("/login");
         }, 1000);
@@ -126,7 +125,6 @@ const SignUpForm = () => {
             <div className="w-full flex-1 mt-8">
               <div className="mx-auto max-w-xs flex flex-col gap-4">
                 <form onSubmit={handleSubmit}>
-                 
                   <input
                     type="text"
                     className="w-full px-5 py-3 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm"
@@ -184,6 +182,30 @@ const SignUpForm = () => {
                       {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                     </div>
                   </div>
+
+                  {/* User Type Selection */}
+                  <div className="flex items-center mb-4">
+                    <label className="mr-4">{translate("user_type")}</label>
+                    <label className="mr-4">
+                      <input
+                        type="radio"
+                        value="buyer"
+                        checked={userType === "buyer"}
+                        onChange={() => setUserType("buyer")}
+                      />
+                      {translate("buyer")}
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="seller"
+                        checked={userType === "seller"}
+                        onChange={() => setUserType("seller")}
+                      />
+                      {translate("seller")}
+                    </label>
+                  </div>
+
                   <button className="mt-5 tracking-wide font-semibold bg-blue-300 hover:bg-blue-500 text-gray-100 w-full py-4 rounded-lg">
                     {translate("sign_up")}
                   </button>

@@ -28,12 +28,15 @@ const products = [
   },
   // More products...
 ]
+interface CartDrawerProps {
+  open: boolean;
+  onClose: () => void;
+}
 
-const CartDrawer = () => {
-    const [open, setOpen] = useState(true)
 
+const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   return (
-    <Dialog open={open} onClose={setOpen} className="relative z-10">
+    <Dialog open={open} onClose={onClose} className="fixed z-40 inset-0">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
@@ -53,7 +56,7 @@ const CartDrawer = () => {
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
+                        onClick={onClose} // Use onClose instead of setOpen(false)
                         className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
                       >
                         <span className="absolute -inset-0.5" />
@@ -122,7 +125,7 @@ const CartDrawer = () => {
                       or{' '}
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
+                        onClick={onClose} // Use onClose instead of setOpen(false)
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
                         Continue Shopping

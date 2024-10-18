@@ -79,14 +79,14 @@ app.post("/api/register", async (req, res) => {
 
   // Create new user
   const userId = uuidv4(); // Generate UUID for user ID
-  const type = "user"; // Default user type
+  const userType = "buyer"; // Default user type
 
   const newUser = new User({
     id: userId,
     email,
     username,
     password: hashedPassword,
-    type,
+    userType,
   });
 
   // Save new user to MongoDB
@@ -262,7 +262,7 @@ app.put("/api/stores/:id/toggle-status", async (req, res) => {
   }
 });
 
-
+("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 // Endpoint to add a product
 app.post("/api/products", async (req, res) => {
   try {
@@ -296,14 +296,14 @@ app.get("/api/products/:id", async (req, res) => {
 
 // Endpoint to get all products or filter by userId
 app.get("/api/products", async (req, res) => {
-  try {
+  try { 
     let products = await Product.find();
-    const { userId } = req.query;
+    const { userId ,storeId } = req.query;
     let result;
-    if (userId) {
-      result = products.filter((product) => product.userId === userId);
-    } else {
-      result = products; // Return all products
+    if (storeId ) {
+      result = products.filter((product) => product.storeId === storeId);
+    } else if(userId ){
+      result = products.filter((product) => product.userId === userId); // Return all products
     }
     res.json(result);
   } catch (error) {

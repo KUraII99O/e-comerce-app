@@ -12,6 +12,7 @@ import StorePage from './pages/StorePage';
 import ConractStorePage from './pages/ConractStorePage';
 import AddProductPage from './pages/seller/AddProductPage';
 import { ManageProductProvider } from './components/Products/Provider';
+import ProductPage from './pages/seller/ProductPage';
 
 const App: React.FC = () => {
   return (
@@ -34,12 +35,13 @@ const App: React.FC = () => {
             {/* Routes that do not use the Layout (no header and footer) */}
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/edit-store/:id" element={<EditStorePage />} />
+            <Route path="/edit-store/:storeId" element={<EditStorePage />} />
             <Route path="/add-store" element={<EditStorePage />} />
             <Route path="/managestores" element={<StoreSettingPage />} />
-            <Route path="/store/:id" element={<StorePage />} />
+            <Route path="/store/:storeId" element={<StorePage />} />
             <Route path="/contactstore" element={<ConractStorePage />} />
             <Route path="/addproduct" element={<AddProductPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             
             {/* Redirect to Home if no match */}
             <Route path="*" element={<Navigate to="/" />} />

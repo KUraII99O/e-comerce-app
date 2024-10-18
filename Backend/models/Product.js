@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     // Assuming each product is associated with a user
   },
+  storeId: {
+    type: String,
+    // Assuming each product is associated with a user
+  },
   createdAt: {
     type: Date,
     default: Date.now,

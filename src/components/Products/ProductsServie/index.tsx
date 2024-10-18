@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export type Product = {
+  oldPrice: any;
   id?: string;
   name: string;
   price: number;
@@ -9,6 +10,8 @@ export type Product = {
   stock: number;
   imageUrl: string;
   userId?: string;
+  reviewsCount?: string;
+  discountPrice?: string;
 };
 
 const ProductService = {

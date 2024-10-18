@@ -1,16 +1,15 @@
-import React from 'react';
-import StoreHeader from '../../components/Store/StoreHeader';
-import TabNavigation from '../../components/Store/TabNavigation';
-import ProductSearchAndCategories from '../../components/Store/ProductSearchAndCategories';
-import NavBar from '../../components/Stores/Header';
-import StoreProductSection from '../../components/Store/Products';
+import React from "react";
+import StoreHeader from "../../components/Store/StoreHeader";
+import TabNavigation from "../../components/Store/TabNavigation";
+import ProductSearchAndCategories from "../../components/Store/ProductSearchAndCategories";
+import NavBar from "../../components/Stores/Header";
+import StoreProductSection from "../../components/Store/Products";
 
 const StorePage: React.FC = () => {
   return (
     <div className="w-full">
       <NavBar />
       <StoreHeader /> {/* Full-width header */}
-      
       {/* Content area */}
       <div className="container mx-auto">
         {/* Tabs */}
@@ -24,7 +23,7 @@ const StorePage: React.FC = () => {
 
           {/* Right Column - Product Section */}
           <div className="w-full md:w-3/4 p-4">
-            <StoreProductSection />
+            <StoreProductSection  />
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const StoreHeader = () => {
-  const { id } = useParams(); // Use useParams to get the id from the URL
+  const { storeId } = useParams(); // Use useParams to get the id from the URL
   const [storeData, setStoreData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -10,7 +10,7 @@ const StoreHeader = () => {
   useEffect(() => {
     const fetchStoreData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/stores/${id}`);
+        const response = await fetch(`http://localhost:3000/api/stores/${storeId}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -28,7 +28,7 @@ const StoreHeader = () => {
     };
 
     fetchStoreData();
-  }, [id]);
+  }, [storeId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
