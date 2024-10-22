@@ -10,6 +10,7 @@ import ProductOptions from "./ProductOptions";
 import RelatedProducts from "./RelatedProducts";
 import CrossSellingProducts from "./CrossSellingProducts";
 import ProductFAQs from "./ProductFAQs";
+import Publish from "./Publish";
 
 const FormElements = () => {
   return (
@@ -170,6 +171,21 @@ const FormElements = () => {
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
+              Publish
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <Publish onSave={function (): void {
+                throw new Error("Function not implemented.");
+              } } onSaveAndExit={function (): void {
+                throw new Error("Function not implemented.");
+              } } />
+            </div>
+          </div>
+        <div className="flex flex-col gap-9">
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
                 Is featured?
               </h3>
             </div>
@@ -214,6 +230,7 @@ const FormElements = () => {
 
           {/* Add other sections if needed */}
         </div>
+      </div>
       </div>
     </>
   );
