@@ -1,39 +1,65 @@
 
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
-
 const ConractStore: React.FC = () => {
-    return (
-    <form className="flex max-w-md flex-col gap-4">
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="email2" value="Your email" />
+  return (
+    <form action="">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-x-8">
+        <div className="relative mb-6">
+          <input
+            type="text"
+            id="default-search"
+            className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+            placeholder="Name..."
+          />
         </div>
-        <TextInput id="email2" type="email" placeholder="name@flowbite.com" required shadow />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="password2" value="Your password" />
+        <div className="relative mb-6">
+          <input
+            type="text"
+            id="default-search"
+            className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+            placeholder="Email Address..."
+          />
         </div>
-        <TextInput id="password2" type="password" required shadow />
       </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="repeat-password" value="Repeat password" />
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-x-8">
+        <div className="relative mb-6">
+          <input
+            type="text"
+            id="default-search"
+            className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+            placeholder="Phone Number..."
+          />
         </div>
-        <TextInput id="repeat-password" type="password" required shadow />
+        <div className="relative mb-6">
+          <input
+            type="text"
+            id="default-search"
+            className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+            placeholder="City , Country..."
+          />
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Checkbox id="agree" />
-        <Label htmlFor="agree" className="flex">
-          I agree with the&nbsp;
-          <Link to="#" className="text-cyan-600 hover:underline dark:text-cyan-500">
-            terms and conditions
-          </Link>
-        </Label>
+      <div className="relative mb-6">
+        <input
+          type="text"
+          id="default-search"
+          className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+          placeholder="Tpoic..."
+        />
       </div>
-      <Button type="submit">Register new account</Button>
+      <div className="relative mb-6">
+        <textarea
+          id="default-search"
+          className="block w-full h-40 px-5 py-2.5 bg-white leading-7 resize-none text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-2xl placeholder-gray-400 focus:outline-none "
+          placeholder="Your Message..."
+          defaultValue={""}
+        />
+      </div>
+      <div className="flex items-center justify-center">
+        <button className="w-52 h-12 bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 rounded-full shadow-xs text-white text-base font-semibold leading-6">
+          Send Message
+        </button>
+      </div>
     </form>
   );
-}
-export default ConractStore
+};
+export default ConractStore;

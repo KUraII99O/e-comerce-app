@@ -72,6 +72,12 @@ const HomeNav = () => {
                   >
                     Profile
                   </Link>
+                  <Link
+                    to="/dashboard"
+                    className="block text-sm font-medium text-gray-700 hover:text-gray-800"
+                  >
+                    Dashboard
+                  </Link>
                   <button
                     onClick={handleSignOut} // Attach handleSignOut to Logout button
                     className="block w-full text-left text-sm font-medium text-gray-700 hover:text-gray-800"

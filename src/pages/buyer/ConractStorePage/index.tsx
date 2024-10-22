@@ -2,11 +2,10 @@ import ConractStore from '../../../components/Store/ConractStore'
 
 const ConractStorePage = () => {
   return (
-    <div>
-        
-        <ConractStore/>
+    <div className="flex justify-center items-center h-screen">
+      <ConractStore />
     </div>
   )
 }
 
-export default ConractStorePage
+export default ConractStorePage;
