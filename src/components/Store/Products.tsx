@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { FaBalanceScale, FaEye, FaHeart, FaList, FaThLarge } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 
@@ -24,8 +24,8 @@ const Products = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortOrder, setSortOrder] = useState<string>("default");
   const { storeId } = useParams<{ storeId: string }>(); // Extract storeId from URL
-  const [itemsPerPage, setItemsPerPage] = useState<number>(4);
-  const [sort, setSort] = useState<string>("asc");
+  const [itemsPerPage, setItemsPerPage] = useState<number>(8); // Default 8 items per page
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Fetch Products based on storeId
   useEffect(() => {
@@ -51,12 +51,14 @@ const Products = () => {
     }
   }, [storeId]);
 
-  // Paginate products (basic setup)
+  // Handle Pagination Logic
   useEffect(() => {
-    setPaginatedProducts(products); // Modify this based on your pagination logic
-  }, [products]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setPaginatedProducts(products.slice(startIndex, endIndex));
+  }, [products, currentPage, itemsPerPage]);
 
-  // Sort products based on selected option
+  // Handle Sorting Logic
   useEffect(() => {
     let sortedProducts = [...products];
     if (sortOrder === "priceLowHigh") {
@@ -64,8 +66,16 @@ const Products = () => {
     } else if (sortOrder === "priceHighLow") {
       sortedProducts.sort((a, b) => b.price - a.price);
     }
-    setPaginatedProducts(sortedProducts);
-  }, [sortOrder, products]);
+    setPaginatedProducts(sortedProducts.slice(0, itemsPerPage)); // Sort & reset paginated data
+  }, [sortOrder, products, itemsPerPage]);
+
+  // Handle Page Change
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate total pages
+  const totalPages = Math.ceil(products.length / itemsPerPage);
 
   // Loading and Error States
   if (loading) return <p>Loading products...</p>;
@@ -80,17 +90,13 @@ const Products = () => {
           {/* View Mode Toggle Icons */}
           <button
             onClick={() => setViewMode("grid")}
-            className={`mr-2 p-2 ${
-              viewMode === "grid" ? "text-blue-500" : "text-gray-500"
-            }`}
+            className={`mr-2 p-2 ${viewMode === "grid" ? "text-blue-500" : "text-gray-500"}`}
           >
             <FaThLarge size={20} />
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`p-2 ${
-              viewMode === "list" ? "text-blue-500" : "text-gray-500"
-            }`}
+            className={`p-2 ${viewMode === "list" ? "text-blue-500" : "text-gray-500"}`}
           >
             <FaList size={20} />
           </button>
@@ -99,12 +105,12 @@ const Products = () => {
         <div className="flex space-x-4">
           {/* Sort Dropdown */}
           <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
             className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
-            <option value="asc">Sort by Price: Low to High</option>
-            <option value="desc">Sort by Price: High to Low</option>
+            <option value="priceLowHigh">Sort by Price: Low to High</option>
+            <option value="priceHighLow">Sort by Price: High to Low</option>
           </select>
 
           {/* Items Per Page Dropdown */}
@@ -123,52 +129,53 @@ const Products = () => {
 
       {/* Products Display */}
       <section
-        className={`grid ${
+        className={`${
           viewMode === "grid"
-            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            : ""
+            ? "flex flex-wrap justify-center md:justify-start" // Flex for grid view
+            : "" // No changes for list view
         }`}
       >
         {paginatedProducts.map((product) => (
           <Link
             key={product.id}
             to={`/product/${product.id}`}
-            className="block" // Ensures the entire card is clickable
+            className={`${
+              viewMode === "grid"
+                ? "w-full sm:w-1/2 lg:w-1/3 p-2" // Responsive grid layout
+                : "block" // List view layout
+            }`}
           >
             <div
-              className={`relative group ${
-                viewMode === "list" ? "flex w-full border p-4 mb-4" : "w-72"
-              } bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl`}
+              className={`relative group bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl ${
+                viewMode === "list" ? "flex w-full border p-4 mb-4" : "w-full"
+              }`}
             >
               {/* Image Section */}
               <div className="relative overflow-hidden">
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className={`${
-                    viewMode === "list" ? "w-40 h-40" : "h-80 w-72"
-                  } object-cover rounded-t-xl`}
+                  className={`object-cover rounded-t-xl ${
+                    viewMode === "list" ? "w-40 h-40" : "h-80 w-full"
+                  }`}
                 />
-
-                {/* Add to Cart Button - Visible on Hover */}
+                {/* Add to Cart Button */}
                 <button className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white py-2 px-4 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                   Add To Cart
                 </button>
-
-                {/* Hover Icons - Visible on Hover */}
+                {/* Hover Icons */}
                 <div className="absolute top-4 right-4 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button className="w-8 h-8 bg-white text-gray-600 rounded-full shadow flex items-center justify-center">
-                  <FaHeart size={18} />
+                    <FaHeart size={18} />
                   </button>
                   <button className="w-8 h-8 bg-white text-gray-600 rounded-full shadow flex items-center justify-center">
-                     <FaEye size={18} />
+                    <FaEye size={18} />
                   </button>
                   <button className="w-8 h-8 bg-white text-gray-600 rounded-full shadow flex items-center justify-center">
-                  <FaBalanceScale size={18} />
+                    <FaBalanceScale size={18} />
                   </button>
                 </div>
               </div>
-
               {/* Product Details */}
               <div className={`p-4 ${viewMode === "list" ? "ml-4" : ""}`}>
                 <span className="text-gray-400 uppercase text-xs">
@@ -195,6 +202,23 @@ const Products = () => {
           </Link>
         ))}
       </section>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4 space-x-2">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

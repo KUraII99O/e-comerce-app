@@ -1,4 +1,4 @@
-import ConractStore from '../../components/Store/ConractStore'
+import ConractStore from '../../../components/Store/ConractStore'
 
 const ConractStorePage = () => {
   return (

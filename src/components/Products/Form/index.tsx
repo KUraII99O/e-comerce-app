@@ -3,12 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ManageProductContext } from "../Provider"; // Adjust import based on your context
 import { useTranslation } from "../../Translator/Provider";
 import ImageUpload from "../../ImageUpload";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; // If using react-toastify for notifications
 import { Product } from "../ProductsServie";
+import * as XLSX from "xlsx"; // Import xlsx library
 
 const ProductForm = () => {
   const { id } = useParams<{ id: string }>();
-  const { products, addProduct, editProduct } = useContext(ManageProductContext);
+  const { products, addProduct, editProduct } =
+    useContext(ManageProductContext);
   const { translate } = useTranslation();
   const navigate = useNavigate();
   const isEditMode = !!id;
@@ -22,7 +24,8 @@ const ProductForm = () => {
     imageUrl: "",
   });
 
-  const [loading, setLoading] = useState(false); // Define loading state
+  const [loading, setLoading] = useState(false);
+  const { storeId } = useParams<{ storeId: string }>(); // Assuming you get storeId from params
 
   useEffect(() => {
     if (isEditMode && id && products?.length > 0) {
@@ -37,8 +40,32 @@ const ProductForm = () => {
     }
   }, [id, isEditMode, products]);
 
+  // New function to handle Excel file upload
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0]; // Assume first sheet
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData: Product[] = XLSX.utils.sheet_to_json(worksheet); // Convert to JSON
+
+        jsonData.forEach((product) => {
+          addProduct(product); // Call addProduct to add each product
+        });
+
+        toast.success("Products imported successfully!");
+      };
+      navigate(`/store/${storeId}`);
+
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
   const handleImageUpload = (imageData: string) => {
-    console.log("Product image uploaded:", imageData); // Debugging line
+    console.log("Product image uploaded:", imageData);
     setFormData((prevData) => ({
       ...prevData,
       imageUrl: imageData,
@@ -47,7 +74,7 @@ const ProductForm = () => {
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
     const { name, value } = e.target;
@@ -74,8 +101,41 @@ const ProductForm = () => {
       console.error("Error submitting form:", error);
       toast.error("An error occurred while saving the product.");
     } finally {
-      setLoading(false); // Moved here to ensure it's reset on completion
+      setLoading(false);
     }
+  };
+
+  // Function to generate random product data and export it as Excel
+  const generateRandomExcelFile = () => {
+    const generateRandomProduct = (): Product => {
+      return {
+        name: `Product-${Math.floor(Math.random() * 1000)}`,
+        description: `Description-${Math.floor(Math.random() * 1000)}`,
+        price: parseFloat((Math.random() * 100).toFixed(2)),
+        category: `Category-${Math.floor(Math.random() * 10)}`,
+        stock: Math.floor(Math.random() * 100),
+        imageUrl: `https://picsum.photos/200/300?random=${Math.floor(
+          Math.random() * 1000
+        )}`, // Random image from Picsum
+        storeId: storeId, // Include storeId
+      };
+    };
+
+    // Generate 10 random products
+    const productData: Product[] = Array.from(
+      { length: 10 },
+      generateRandomProduct
+    );
+
+    // Convert product data to worksheet
+    const worksheet = XLSX.utils.json_to_sheet(productData);
+
+    // Create a new workbook and add the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+
+    // Export the Excel file
+    XLSX.writeFile(workbook, `products_${storeId}.xlsx`);
   };
 
   return (
@@ -190,8 +250,21 @@ const ProductForm = () => {
               />
             </div>
           </div>
-
         </div>
+        <button
+          type="button"
+          onClick={() => document.getElementById("file-input")?.click()} // Trigger file input click
+          className="bg-green-300 text-white px-6 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200 mr-4"
+        >
+          Import from Excel
+        </button>
+        <input
+          type="file"
+          id="file-input"
+          style={{ display: "none" }} // Hide the input
+          accept=".xlsx, .xls" // Allow only Excel files
+          onChange={handleFileUpload} // Handle file selection
+        />
 
         <button
           type="submit"
@@ -200,6 +273,13 @@ const ProductForm = () => {
         >
           {isEditMode ? translate("update") : translate("add")}
           {translate("product")}
+        </button>
+        <button
+          type="button"
+          onClick={generateRandomExcelFile} // Call the function to generate Excel
+          className="bg-orange-300 text-white px-6 py-2 ml-4 rounded hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200 mr-4"
+        >
+          Generate Random Excel File
         </button>
       </form>
     </div>

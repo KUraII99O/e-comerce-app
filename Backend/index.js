@@ -38,10 +38,13 @@ const checkPassword = async (inputPassword, storedPassword) => {
   return await bcrypt.compare(inputPassword, storedPassword);
 };
 
+
+
 // Define User model
 const User = require("./models/User"); // Adjust path if needed
 const Store = require("./models/Store"); // Adjust path if needed
 const Product = require("./models/Product"); // Adjust path if needed
+const Cart = require("./models/Cart"); // Adjust path if needed
 
 // Predefined users array
 const adminhash = bcrypt.hashSync("adminpassword", 10);
@@ -56,6 +59,7 @@ const users = [
   },
 ];
 const stores = [];
+const carts  = [];
 
 app.get("/api/users", (req, res) => {
   res.json(users);
@@ -345,6 +349,150 @@ app.delete("/api/products/:id", async (req, res) => {
     } else {
       res.status(404).json({ error: "Product not found" });
     }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+// Endpoint to add an item to the cart
+app.post("/api/cart", async (req, res) => {
+  try {
+    const { userId, productId, name, price, quantity } = req.body;
+    
+    // Check if cart exists for the user in MongoDB
+    let cart = await Cart.findOne({ userId });
+    
+    // If cart doesn't exist, create a new one
+    if (!cart) {
+      cart = new Cart({
+        id: uuidv4(), // Unique cart ID
+        userId,
+        items: [{ productId, name, price, quantity }]
+      });
+    } else {
+      // Check if item already exists in cart
+      const existingItem = cart.items.find(item => item.productId === productId);
+      if (existingItem) {
+        existingItem.quantity += quantity; // Update quantity if item already exists
+      } else {
+        // Add new item to cart
+        cart.items.push({ productId, name, price, quantity });
+      }
+    }
+
+    await cart.save(); // Save cart to MongoDB
+
+    // Add/Update cart in in-memory store (optional)
+    const index = carts.findIndex(c => c.userId === userId);
+    if (index !== -1) {
+      carts[index] = cart;
+    } else {
+      carts.push(cart);
+    }
+
+    res.status(201).json({ message: "Item added to cart", cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to get the cart for a user
+app.get("/api/cart/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find the cart in MongoDB
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({ error: "Cart not found" });
+    }
+
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to update an item in the cart
+app.put("/api/cart/:userId/item/:productId", async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+    const { quantity } = req.body;
+
+    // Find the cart in MongoDB
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({ error: "Cart not found" });
+    }
+
+    // Find the item in the cart
+    const item = cart.items.find(i => i.productId === productId);
+    if (!item) {
+      return res.status(404).json({ error: "Item not found in cart" });
+    }
+
+    // Update the item quantity
+    item.quantity = quantity;
+
+    await cart.save(); // Save the cart
+
+    // Update in-memory cart (optional)
+    const index = carts.findIndex(c => c.userId === userId);
+    if (index !== -1) {
+      carts[index] = cart;
+    }
+
+    res.json({ message: "Item updated in cart", cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to remove an item from the cart
+app.delete("/api/cart/:userId/item/:productId", async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+
+    // Find the cart in MongoDB
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({ error: "Cart not found" });
+    }
+
+    // Filter out the item from the cart
+    cart.items = cart.items.filter(i => i.productId !== productId);
+
+    await cart.save(); // Save the updated cart
+
+    // Update in-memory cart (optional)
+    const index = carts.findIndex(c => c.userId === userId);
+    if (index !== -1) {
+      carts[index] = cart;
+    }
+
+    res.json({ message: "Item removed from cart", cart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to clear the cart
+app.delete("/api/cart/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find and delete the cart in MongoDB
+    const deletedCart = await Cart.findOneAndDelete({ userId });
+    if (!deletedCart) {
+      return res.status(404).json({ error: "Cart not found" });
+    }
+
+    // Remove cart from in-memory store (optional)
+    carts = carts.filter(c => c.userId !== userId);
+
+    res.json({ message: "Cart cleared", cart: deletedCart });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

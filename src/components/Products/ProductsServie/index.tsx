@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export type Product = {
-  oldPrice: any;
+  oldPrice?: string;
   id?: string;
   name: string;
   price: number;
@@ -10,6 +10,7 @@ export type Product = {
   stock: number;
   imageUrl: string;
   userId?: string;
+  storeId?: string;
   reviewsCount?: string;
   discountPrice?: string;
 };
