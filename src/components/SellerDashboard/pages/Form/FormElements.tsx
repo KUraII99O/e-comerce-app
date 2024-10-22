@@ -1,22 +1,30 @@
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import CheckboxFive from '../../components/Checkboxes/CheckboxFive';
-import CheckboxFour from '../../components/Checkboxes/CheckboxFour';
-import CheckboxOne from '../../components/Checkboxes/CheckboxOne';
-import CheckboxThree from '../../components/Checkboxes/CheckboxThree';
-import CheckboxTwo from '../../components/Checkboxes/CheckboxTwo';
-import SwitcherFour from '../../components/Switchers/SwitcherFour';
-import SwitcherOne from '../../components/Switchers/SwitcherOne';
-import SwitcherThree from '../../components/Switchers/SwitcherThree';
-import SwitcherTwo from '../../components/Switchers/SwitcherTwo';
-import DatePickerOne from '../../components/Forms/DatePicker/DatePickerOne';
-import DatePickerTwo from '../../components/Forms/DatePicker/DatePickerTwo';
-import SelectGroupTwo from '../../components/Forms/SelectGroup/SelectGroupTwo';
-import MultiSelect from '../../components/Forms/MultiSelect';
+import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
+import SwitcherOne from "../../components/Switchers/SwitcherOne";
+import DatePickerOne from "../../components/Forms/DatePicker/DatePickerOne";
+import DatePickerTwo from "../../components/Forms/DatePicker/DatePickerTwo";
+import SelectGroupTwo from "../../components/Forms/SelectGroup/SelectGroupTwo";
+import MultiSelect from "../../components/Forms/MultiSelect";
+import CheckboxOne from "../../components/Checkboxes/CheckboxOne";
+import CheckboxTwo from "../../components/Checkboxes/CheckboxTwo";
+import ProductForm from "./Productoverview";
+import Attributes from "./Attributes";
+import ProductOptions from "./ProductOptions";
+import RelatedProducts from "./RelatedProducts";
+import CrossSellingProducts from "./CrossSellingProducts";
+import ProductFAQs from "./ProductFAQs";
 
 const FormElements = () => {
   return (
     <>
-      <Breadcrumb pageName="Form Elements" />
+      <Breadcrumb
+        links={[
+          { name: "Dashboard", url: "/admin/dashboard" },
+          { name: "Ecommerce", url: "/admin/ecommerce" },
+          { name: "Products", url: "/admin/ecommerce/products" },
+          { name: "New Product", url: "/admin/ecommerce/products/create" },
+          { name: "New Physical Product" }, // Last breadcrumb (no URL)
+        ]}
+      />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
         <div className="flex flex-col gap-9">
@@ -30,7 +38,7 @@ const FormElements = () => {
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
                 <label className="mb-3 block text-black dark:text-white">
-                  Default Input
+                  Name
                 </label>
                 <input
                   type="text"
@@ -41,65 +49,38 @@ const FormElements = () => {
 
               <div>
                 <label className="mb-3 block text-black dark:text-white">
-                  Active Input
+                  Permalink
                 </label>
                 <input
                   type="text"
-                  placeholder="Active Input"
-                  className="w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white"
+                  placeholder="Default Input"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
 
+              {/* First Textarea */}
               <div>
-                <label className="mb-3 block font-medium text-black dark:text-white">
-                  Disabled label
+                <label className="mb-3 block text-black dark:text-white">
+                  Description
                 </label>
-                <input
-                  type="text"
-                  placeholder="Disabled label"
-                  disabled
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary dark:disabled:bg-black"
+                <textarea
+                  placeholder="Enter product description"
+                  rows={4}
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
-            </div>
-          </div>
 
-          {/* <!-- Toggle switch input --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Toggle switch input
-              </h3>
-            </div>
-            <div className="flex flex-col gap-5.5 p-6.5">
-              <SwitcherOne />
-              <SwitcherTwo />
-              <SwitcherThree />
-              <SwitcherFour />
-            </div>
-          </div>
-
-          {/* <!-- Time and date --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Time and date
-              </h3>
-            </div>
-            <div className="flex flex-col gap-5.5 p-6.5">
-              <DatePickerOne />
-              <DatePickerTwo />
-            </div>
-          </div>
-
-          {/* <!-- File upload --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                File upload
-              </h3>
-            </div>
-            <div className="flex flex-col gap-5.5 p-6.5">
+              {/* Second Textarea */}
+              <div>
+                <label className="mb-3 block text-black dark:text-white">
+                  Additional Information
+                </label>
+                <textarea
+                  placeholder="Enter additional information"
+                  rows={4}
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+              </div>
               <div>
                 <label className="mb-3 block text-black dark:text-white">
                   Attach file
@@ -121,50 +102,91 @@ const FormElements = () => {
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-9">
-          {/* <!-- Textarea Fields --> */}
+          {/* <!-- Toggle switch input --> */}
+
+          {/* <!-- Time and date --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Textarea Fields
+                Overview
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Default textarea
-                </label>
-                <textarea
-                  rows={6}
-                  placeholder="Default textarea"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                ></textarea>
-              </div>
+              <ProductForm />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Attributes
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <Attributes />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Cross-selling products
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <CrossSellingProducts />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Product options
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <ProductOptions />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Related products
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <RelatedProducts />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Product FAQs{" "}
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <ProductFAQs />
+            </div>
+          </div>
+        </div>
 
-              <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Active textarea
-                </label>
-                <textarea
-                  rows={6}
-                  placeholder="Active textarea"
-                  className="w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white"
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Disabled textarea
-                </label>
-                <textarea
-                  rows={6}
-                  disabled
-                  placeholder="Disabled textarea"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary dark:disabled:bg-black"
-                ></textarea>
-              </div>
+        <div className="flex flex-col gap-9">
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Is featured?
+              </h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <SwitcherOne />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <MultiSelect id="multiSelect" />
+            </div>
+          </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="flex flex-col gap-5.5 p-6.5">
+              <SelectGroupTwo />
             </div>
           </div>
 
@@ -176,26 +198,23 @@ const FormElements = () => {
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <CheckboxOne />
-              <CheckboxTwo />
-              <CheckboxThree />
-              <CheckboxFour />
-              <CheckboxFive />
+              <CheckboxOne />{" "}
             </div>
           </div>
 
-          {/* <!-- Select input --> */}
+          {/* <!-- Product collections --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Select input
+                Product collections
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <SelectGroupTwo />
-              <MultiSelect id="multiSelect" />
+              <CheckboxTwo />
             </div>
           </div>
+
+          {/* Add other sections if needed */}
         </div>
       </div>
     </>

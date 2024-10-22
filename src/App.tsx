@@ -29,6 +29,8 @@ import Profile from "./components/SellerDashboard/pages/Profile";
 import ECommerce from "./components/SellerDashboard/pages/Dashboard/ECommerce";
 import Calendar from "./components/SellerDashboard/pages/Calendar";
 import OrdersPage from "./components/SellerDashboard/pages/OrdersPage";
+import ProductsPage from "./components/SellerDashboard/pages/ProductsPage";
+import CreateProductPage from "./components/SellerDashboard/pages/CreateProductPage";
 
 const App: React.FC = () => {
   return (
@@ -173,6 +175,24 @@ const App: React.FC = () => {
                   <DefaultLayout>
                     <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <OrdersPage />
+                  </DefaultLayout>
+                }
+              />
+              <Route
+                path="/admin/ecommerce/products"
+                element={
+                  <DefaultLayout>
+                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <ProductsPage />
+                  </DefaultLayout>
+                }
+              />
+              <Route
+                path="/admin/ecommerce/products/create"
+                element={
+                  <DefaultLayout>
+                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <CreateProductPage />
                   </DefaultLayout>
                 }
               />
