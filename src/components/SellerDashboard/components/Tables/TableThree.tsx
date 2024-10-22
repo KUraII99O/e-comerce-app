@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Package } from "../../types/package";
 import Pagination from "../../../Pagination";

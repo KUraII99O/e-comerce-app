@@ -1,7 +1,5 @@
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
 import SwitcherOne from "../../components/Switchers/SwitcherOne";
-import DatePickerOne from "../../components/Forms/DatePicker/DatePickerOne";
-import DatePickerTwo from "../../components/Forms/DatePicker/DatePickerTwo";
 import SelectGroupTwo from "../../components/Forms/SelectGroup/SelectGroupTwo";
 import MultiSelect from "../../components/Forms/MultiSelect";
 import CheckboxOne from "../../components/Checkboxes/CheckboxOne";
