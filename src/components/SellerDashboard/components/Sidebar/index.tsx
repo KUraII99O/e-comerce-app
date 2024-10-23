@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, } from "react-router-dom";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Logo from "../../images/logo/logo.svg";
 
@@ -11,7 +11,6 @@ interface SidebarProps {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
-  const { storeId } = useParams<{ storeId: string }>(); // Dynamically getting storeId from the URL
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -270,30 +269,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
-                              to={`/stores/${storeId}/product-list`}
+                              to="/admin/ecommerce/stores"
                               className={({ isActive }) =>
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
                                 (isActive && "!text-white")
                               }
                             >
-                              Reports
+                              Stores
                             </NavLink>
                           </li>
                         </ul>
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
-                              to={`/stores/orders/`}
+                              to="/admin/ecommerce/products"
                               className={({ isActive }) =>
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
                                 (isActive && "!text-white")
                               }
                             >
-                              Orders
+                              Products
                             </NavLink>
                           </li>
                         </ul>
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                        {/* <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
                               to="/dashboard"
@@ -526,7 +525,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Customers
                             </NavLink>
                           </li>
-                        </ul>
+                        </ul> */}
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>

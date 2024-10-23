@@ -2,10 +2,15 @@ import { Link } from 'react-router-dom';
 
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 
-const Buttons = () => {
+const Buttons= () => {
+  const breadcrumbLinks = [
+      { name: 'Home', url: '/' },
+      { name: 'Tables', url: '/tables' },
+      { name: 'Current Page' }, // No URL for the current page
+  ];
   return (
     <>
-      <Breadcrumb pageName="Buttons" />
+            <Breadcrumb links={breadcrumbLinks} />
 
       {/* <!-- Normal Button Items --> */}
       <div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

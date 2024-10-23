@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Store } from "../Stores/StoreService";
 import { Link } from "react-router-dom";
+import { Store } from "../SellerDashboard/components/Store/StoreService";
 
 const OurStores = () => {
   const [stores, setStores] = useState<Store[]>([]);
@@ -56,7 +56,9 @@ const OurStores = () => {
         {[...Array(5)].map((_, index) => (
           <svg
             key={index}
-            className={`h-5 w-5 ${index < rating ? "text-yellow-400" : "text-gray-300"}`}
+            className={`h-5 w-5 ${
+              index < rating ? "text-yellow-400" : "text-gray-300"
+            }`}
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -81,7 +83,11 @@ const OurStores = () => {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`relative py-2 ${selectedCategory === category ? "text-indigo-600 font-semibold" : ""}`}
+                className={`relative py-2 ${
+                  selectedCategory === category
+                    ? "text-indigo-600 font-semibold"
+                    : ""
+                }`}
               >
                 {selectedCategory === category && (
                   <span className="absolute inset-y-0 left-0 w-1 bg-indigo-600 rounded-full"></span>
@@ -113,9 +119,12 @@ const OurStores = () => {
                 onMouseEnter={() => setHoveredStoreId(store.id)}
                 onMouseLeave={() => setHoveredStoreId(null)}
               >
-                <a href="#" className="group block overflow-hidden rounded-lg relative">
+                <a
+                  href="#"
+                  className="group block overflow-hidden rounded-lg relative"
+                >
                   <img
-                    src={store.image}
+                    src={store.logo}
                     alt={store.storeName}
                     className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
                   />
@@ -128,14 +137,15 @@ const OurStores = () => {
 
                   {/* Visit Store Button */}
                   {hoveredStoreId === store.id && (
-                   <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                   <Link to={`/store/${store.id}`}> {/* Link to the store page */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Link to={`/store/${store.id}`}>
+                        {" "}
+                        {/* Link to the store page */}
                         <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg">
-                          Visit Store 
+                          Visit Store
                         </button>
                       </Link>
-                 </div>
-
+                    </div>
                   )}
                 </a>
               </li>
@@ -169,7 +179,9 @@ const OurStores = () => {
                 <a
                   href="#"
                   onClick={(e) => handlePagination(e, index + 1)}
-                  className={`block size-8 rounded border border-gray-100 text-center leading-8 ${currentPage === index + 1 ? "bg-black text-white" : ""}`}
+                  className={`block size-8 rounded border border-gray-100 text-center leading-8 ${
+                    currentPage === index + 1 ? "bg-black text-white" : ""
+                  }`}
                 >
                   {index + 1}
                 </a>

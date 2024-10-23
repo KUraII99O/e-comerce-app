@@ -4,9 +4,16 @@ import userSix from '../images/user/user-06.png';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
+  const breadcrumbLinks = [
+      { name: 'Home', url: '/' },
+      { name: 'Tables', url: '/tables' },
+      { name: 'Settings', url: '/Settings' },
+      { name: 'Profile', url: '/Profile' },
+      { name: 'Current Page' }, // No URL for the current page
+  ];
   return (
     <>
-      <Breadcrumb pageName="Profile" />
+            <Breadcrumb links={breadcrumbLinks} />
 
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative z-20 h-35 md:h-65">

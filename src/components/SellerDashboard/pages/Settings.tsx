@@ -2,10 +2,16 @@ import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import userThree from '../images/user/user-03.png';
 
 const Settings = () => {
+  const breadcrumbLinks = [
+      { name: 'Home', url: '/' },
+      { name: 'Tables', url: '/tables' },
+      { name: 'Settings', url: '/Settings' },
+      { name: 'Current Page' }, // No URL for the current page
+  ];
   return (
     <>
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Settings" />
+      <Breadcrumb links={breadcrumbLinks} />
 
         <div className="grid grid-cols-5 gap-8">
           <div className="col-span-5 xl:col-span-3">

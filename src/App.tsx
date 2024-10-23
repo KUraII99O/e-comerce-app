@@ -5,9 +5,7 @@ import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
 import { AuthProvider } from "./components/UserContext";
-import StoreSettingPage from "./pages/StoreSettingPage";
-import { ManageStoreProvider } from "./components/Stores/Provider";
-import EditStorePage from "./pages/EditStorePage";
+import { ManageStoreProvider } from "./components/SellerDashboard/components/Store/Provider";
 import StorePage from "./pages/StorePage";
 import ConractStorePage from "./pages/buyer/ConractStorePage";
 import { ManageProductProvider } from "./components/Products/Provider";
@@ -28,9 +26,10 @@ import FormElements from "./components/SellerDashboard/pages/Form/FormElements";
 import Profile from "./components/SellerDashboard/pages/Profile";
 import ECommerce from "./components/SellerDashboard/pages/Dashboard/ECommerce";
 import Calendar from "./components/SellerDashboard/pages/Calendar";
-import OrdersPage from "./components/SellerDashboard/pages/OrdersPage";
-import ProductsPage from "./components/SellerDashboard/pages/ProductsPage";
 import CreateProductPage from "./components/SellerDashboard/pages/CreateProductPage";
+import StoreListPage from "./components/SellerDashboard/pages/StoreListPage";
+import ProductsListPage from "./components/SellerDashboard/pages/ProductsPage";
+import StoreFormPage from "./components/SellerDashboard/pages/StoreFormPage";
 
 const App: React.FC = () => {
   return (
@@ -51,12 +50,9 @@ const App: React.FC = () => {
               />
               <Route path="/login" element={<LogInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/edit-store/:storeId" element={<EditStorePage />} />
-              <Route path="/add-store" element={<EditStorePage />} />
-              <Route path="/managestores" element={<StoreSettingPage />} />
               <Route path="/store/:storeId" element={<StorePage />} />
               <Route path="/contactstore" element={<ConractStorePage />} />
-              
+
               <Route path="/product/:id" element={<ProductPage />} />
 
               {/* Routes that use DefaultLayout */}
@@ -69,7 +65,7 @@ const App: React.FC = () => {
                   </DefaultLayout>
                 }
               />
-              
+
               <Route
                 path="/calendar"
                 element={
@@ -164,26 +160,40 @@ const App: React.FC = () => {
                 path="/auth/signup"
                 element={
                   <DefaultLayout>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <SignUp />
                   </DefaultLayout>
                 }
               />
-              <Route
-                path="/stores/orders/"
-                element={
-                  <DefaultLayout>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <OrdersPage />
-                  </DefaultLayout>
-                }
-              />
+             
               <Route
                 path="/admin/ecommerce/products"
                 element={
                   <DefaultLayout>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <ProductsPage />
+                    <ProductsListPage />
+                  </DefaultLayout>
+                }
+              />
+              <Route
+                path="/admin/ecommerce/stores"
+                element={
+                  <DefaultLayout>
+                    <StoreListPage />
+                  </DefaultLayout>
+                }
+              />
+              <Route
+                path="/admin/ecommerce/stores/create"
+                element={
+                  <DefaultLayout>
+                    <StoreFormPage />
+                  </DefaultLayout>
+                }
+              />
+              <Route
+                path="/admin/ecommerce/stores/edit-store/:id"
+                element={
+                  <DefaultLayout>
+                    <StoreFormPage />
                   </DefaultLayout>
                 }
               />
@@ -191,7 +201,6 @@ const App: React.FC = () => {
                 path="/admin/ecommerce/products/create"
                 element={
                   <DefaultLayout>
-                    <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <CreateProductPage />
                   </DefaultLayout>
                 }

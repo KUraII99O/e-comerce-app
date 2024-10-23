@@ -15,9 +15,13 @@ const HomeNav = () => {
     for (let i = 0; i < username.length; i++) {
       hash = username.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const color = Math.floor(Math.abs(Math.sin(hash) * 16777215) % 16777215).toString(16);
+    const color = Math.floor(
+      Math.abs(Math.sin(hash) * 16777215) % 16777215
+    ).toString(16);
     const initials = username.substring(0, 1).toUpperCase();
-    return `https://ui-avatars.com/api/?background=${color}&color=fff&name=${encodeURIComponent(initials)}`;
+    return `https://ui-avatars.com/api/?background=${color}&color=fff&name=${encodeURIComponent(
+      initials
+    )}`;
   };
 
   // Handle user sign out
@@ -33,15 +37,12 @@ const HomeNav = () => {
           <>
             {/* Your Stores link outside of popover */}
             <Link
-              to="/managestores"
-              className="text-sm font-medium text-gray-700 hover:text-gray-800"
+              to="/admin/ecommerce/stores"
+              className="text-sm font-semibold text-blue-600 bg-blue-100 px-4 py-2 rounded-md hover:bg-blue-200 hover:text-blue-700 transition"
             >
-              Your Stores
+              Become a seller
             </Link>
-            <span
-              aria-hidden="true"
-              className="h-6 w-px bg-gray-200"
-            />
+            <span aria-hidden="true" className="h-6 w-px bg-gray-300 mx-4" />
 
             {/* Profile Popover */}
             <Popover className="relative">
@@ -56,7 +57,7 @@ const HomeNav = () => {
                     />
                   ) : (
                     <img
-                      src={generateProfileImage(user?.username || '')}
+                      src={generateProfileImage(user?.username || "")}
                       alt="Generated Profile"
                       className="rounded-full h-8 w-8 "
                     />
@@ -97,10 +98,7 @@ const HomeNav = () => {
             >
               Sign in
             </Link>
-            <span
-              aria-hidden="true"
-              className="h-6 w-px bg-gray-200"
-            />
+            <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
             <Link
               to="/signup"
               className="text-sm font-medium text-gray-700 hover:text-gray-800"

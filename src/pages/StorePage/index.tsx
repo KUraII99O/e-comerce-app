@@ -2,8 +2,8 @@ import React from "react";
 import StoreHeader from "../../components/Store/StoreHeader";
 import TabNavigation from "../../components/Store/TabNavigation";
 import ProductSearchAndCategories from "../../components/Store/ProductSearchAndCategories";
-import NavBar from "../../components/Stores/Header";
 import StoreProductSection from "../../components/Store/Products";
+import NavBar from "../../components/Stores/Header";
 
 const StorePage: React.FC = () => {
   return (

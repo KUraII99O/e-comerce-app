@@ -1,5 +1,4 @@
-import { Fragment, useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import {useState } from 'react';
 import Header from '../Header';
 import Ccarousel from '../Carousel';
 import Foter from '../Footer';

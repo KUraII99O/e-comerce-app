@@ -1,17 +1,38 @@
 import { v4 as uuidv4 } from "uuid";
 
 export type Store = {
-  id: string;
-  storeName: string;
-  location: string;
-  ownerName: string;
-  contactEmail: string;
-  contactNumber: string;
+  id: string; // MongoDB id is usually handled internally, you may want to keep this or remove it if using _id instead
+  userId: string; // Refers to the user who owns the store
+  storeName: string; // Matches the 'name' field in the schema
+  shopUrl: string; // Matches the 'shopUrl' field in the schema
+  contactEmail: string; // Matches the 'email' field in the schema
+  contactNumber: string; // Matches the 'phone' field in the schema
+  about?: string; // Matches the 'description' field in the schema
+  taxId?: string; // Matches the 'taxId' field in the schema
+  company?: string; // Matches the 'company' field in the schema
+  logo?: string; // Matches the 'logo' field in the schema
+  squareLogo?: string; // Matches the 'squareLogo' field in the schema
   coverImage?: string;
-  about: string;
-  userId: string;
-  image?: string; // Optional field for image
-  storeType: string;
+  
+
+  location: {
+    // New nested location object to represent address components
+    country: string; // Matches the 'country' field in the schema
+    state: string; // Matches the 'state' field in the schema
+    city: string; // Matches the 'city' field in the schema
+    address: string; // Matches the 'address' field in the schema
+  };
+  // Matches the 'coverImage' field in the schema
+  socialMediaLinks?: {
+    // Matches the 'socialMediaLinks' structure in the schema
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+    whatsapp?: string;
+    pinterest?: string;
+  };
 };
 
 const StoreService = {
@@ -34,7 +55,9 @@ async function fetchStores(): Promise<Store[]> {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/api/stores?userId=' + user.id);
+    const response = await fetch(
+      "http://localhost:3000/api/stores?userId=" + user.id
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch store data");
     }
@@ -88,7 +111,8 @@ async function addStore(
 async function editStore(
   id: string,
   updatedStore: Omit<Store, "id" | "userId">
-): Promise<Store> { // Change the return type to Promise<Store>
+): Promise<Store> {
+  // Change the return type to Promise<Store>
   const loggedInUser = localStorage.getItem("loggedInUser");
   if (!loggedInUser) {
     throw new Error("User not logged in");
@@ -115,18 +139,14 @@ async function editStore(
     // Assuming the API returns the updated store data
     const updatedStoreData: Store = await response.json(); // Parse the response
     return updatedStoreData; // Return the updated store data
-
   } catch (error) {
     console.error("Error updating store:", (error as Error).message);
     throw error;
   }
 }
 
-
-
 // Delete a store
 async function deleteStore(id: string): Promise<void> {
-
   try {
     const response = await fetch(`http://localhost:3000/api/stores/${id}`, {
       method: "DELETE",

@@ -14,7 +14,7 @@ interface LogInProps {
   onLogin: () => void;
 }
 
-const LogIn: React.FC<LogInProps> = ({ onLogin }) => {
+const LogIn: React.FC<LogInProps> = ({  }) => {
   const { translate, language } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

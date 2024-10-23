@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BellIcon } from "@heroicons/react/24/outline";
-import ProfilePopover from "../PopOver";
 import { useTranslation } from "../../Translator/Provider";
+import ProfilePopover from "../PopOver";
 
 const NavBar: React.FC = () => {
   const { isRTL } = useTranslation();
