@@ -5,10 +5,7 @@ import { Store } from "../SellerDashboard/components/Store/StoreService";
 const OurStores = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [showAll, setShowAll] = useState(false);
-  const [hoveredStoreId, setHoveredStoreId] = useState<string | null>(null);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -28,189 +25,120 @@ const OurStores = () => {
   }, []);
 
   const totalPages = Math.ceil(stores.length / itemsPerPage);
-
   const currentStores = stores.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handlePagination = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    page: number
-  ) => {
+  const handlePagination = (e: React.MouseEvent<HTMLAnchorElement>, page: number) => {
     e.preventDefault();
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
 
-  const handleToggle = () => {
-    setShowAll(!showAll);
-  };
-
-  const categories = ["All", "Type", "Trending", "Top rated"];
-
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex space-x-1">
-        {[...Array(5)].map((_, index) => (
-          <svg
-            key={index}
-            className={`h-5 w-5 ${
-              index < rating ? "text-yellow-400" : "text-gray-300"
-            }`}
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 15.27L16.18 19l-1.64-7.03L20 8.24l-7.19-.61L10 2 7.19 7.63 0 8.24l5.46 3.73L3.82 19z" />
-          </svg>
-        ))}
-      </div>
-    );
-  };
+  const renderStars = (rating: number) => (
+    <div className="flex space-x-1 mb-1">
+      {[...Array(5)].map((_, index) => (
+        <svg
+          key={index}
+          className={`h-4 w-4 ${index < rating ? "text-yellow-400" : "text-gray-300"}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674h4.911c.969 0 1.371 1.24.588 1.81l-3.97 2.882 1.518 4.673c.3.921-.755 1.688-1.54 1.11l-3.97-2.882-3.971 2.882c-.784.578-1.84-.189-1.54-1.11l1.518-4.673-3.97-2.882c-.784-.57-.38-1.81.588-1.81h4.911l1.518-4.674z" />
+        </svg>
+      ))}
+    </div>
+  );
 
   return (
-    <div>
-      <section>
-        <div className="container mx-auto py-9 md:py-12 px-4 md:px-6 max-w-6xl">
-          <h3 className="text-2xl font-bold text-gray-800 hover:underline mb-4">
-            <span className="text-indigo-600 text-4xl">Our</span> Stores
-          </h3>
+    <div className="container mx-auto py-9 px-4 md:px-6 max-w-6xl">
+      <h3 className="text-2xl font-bold text-gray-800 mb-4">
+        <span className="text-indigo-600 text-4xl">Our</span> Stores
+      </h3>
 
-          <div className="flex space-x-6 text-lg font-medium text-gray-500 mb-6">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`relative py-2 ${
-                  selectedCategory === category
-                    ? "text-indigo-600 font-semibold"
-                    : ""
-                }`}
-              >
-                {selectedCategory === category && (
-                  <span className="absolute inset-y-0 left-0 w-1 bg-indigo-600 rounded-full"></span>
-                )}
-                <span className="pl-4">{category}</span>
-              </button>
-            ))}
-          </div>
+      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {currentStores.map((store) => (
+          <li key={store.id} className="border rounded-lg shadow p-6 relative flex flex-col">
+            <div className="flex justify-between mb-4">
+              <div>
+                <h4 className="font-semibold text-lg">{store.name}</h4>
+                <div className="flex items-center">
+                  {renderStars(4)}
+                  <p className="text-sm text-gray-500 ml-2">(67 reviews)</p>
+                </div>
+              </div>
+              <img
+                src={store.logo}
+                alt={`${store.name} logo`}
+                className="w-16 h-16 rounded-full object-cover absolute top-3 right-3"
+              />
+            </div>
 
-          <div className="flex text-right mt-6">
-            <button
-              onClick={handleToggle}
-              className="text-indigo-600 hover:underline"
+            <div className="mb-4 text-sm text-gray-600">
+              <p>{store.location.address}, {store.location.city}, {store.location.state}</p>
+              <p className="flex items-center mt-2">
+                <svg className="w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a1 1 0 001.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {store.email}
+              </p>
+              <p className="flex items-center mt-2">
+                <svg className="w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.67 12.12a2 2 0 001.96 1.88h10.74a2 2 0 001.96-1.88L21 10M6 6h12M6 6H5a2 2 0 00-2 2v1.61m0 6.72a2 2 0 00.66 1.53M5 12h14M6 6L5 4m0 0H4a2 2 0 00-2 2v1" />
+                </svg>
+                {store.phone}
+              </p>
+            </div>
+
+            <Link
+              to={`/store/${store.id}`}
+              className="mt-auto block text-center text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-md"
             >
-              {showAll ? "See Less" : "See More"}
-            </button>
-          </div>
+              Visit Store
+            </Link>
+          </li>
+        ))}
+      </ul>
 
-          <div className="mt-8">
-            <p className="text-sm text-gray-500">
-              Showing {currentStores.length} of {stores.length}
-            </p>
-          </div>
-
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 rounded-lg">
-            {currentStores.map((store) => (
-              <li
-                key={store.id}
-                onMouseEnter={() => setHoveredStoreId(store.id)}
-                onMouseLeave={() => setHoveredStoreId(null)}
-              >
-                <a
-                  href="#"
-                  className="group block overflow-hidden rounded-lg relative"
-                >
-                  <img
-                    src={store.logo}
-                    alt={store.storeName}
-                    className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
-                  />
-                  <div className="relative bg-white pt-3">
-                    <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                      {store.storeName}
-                    </h3>
-                    {renderStars(4)}{" "}
-                  </div>
-
-                  {/* Visit Store Button */}
-                  {hoveredStoreId === store.id && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Link to={`/store/${store.id}`}>
-                        {" "}
-                        {/* Link to the store page */}
-                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg">
-                          Visit Store
-                        </button>
-                      </Link>
-                    </div>
-                  )}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <ol className="mt-8 flex justify-center gap-1 text-xs font-medium">
-            <li>
-              <a
-                href="#"
-                onClick={(e) => handlePagination(e, currentPage - 1)}
-                className="inline-flex items-center justify-center rounded border border-gray-100"
-              >
-                <span className="sr-only">Prev Page</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="size-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </a>
-            </li>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <li key={index}>
-                <a
-                  href="#"
-                  onClick={(e) => handlePagination(e, index + 1)}
-                  className={`block size-8 rounded border border-gray-100 text-center leading-8 ${
-                    currentPage === index + 1 ? "bg-black text-white" : ""
-                  }`}
-                >
-                  {index + 1}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href="#"
-                onClick={(e) => handlePagination(e, currentPage + 1)}
-                className="inline-flex items-center justify-center rounded border border-gray-100"
-              >
-                <span className="sr-only">Next Page</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="size-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </a>
-            </li>
-          </ol>
-        </div>
-      </section>
+      <ol className="mt-8 flex justify-center gap-1 text-xs font-medium">
+        <li>
+          <a
+            href="#"
+            onClick={(e) => handlePagination(e, currentPage - 1)}
+            className="inline-flex items-center justify-center rounded border border-gray-100"
+          >
+            <span className="sr-only">Prev Page</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          </a>
+        </li>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <li key={index}>
+            <a
+              href="#"
+              onClick={(e) => handlePagination(e, index + 1)}
+              className={`block size-8 rounded border border-gray-100 text-center leading-8 ${currentPage === index + 1 ? "bg-black text-white" : ""}`}
+            >
+              {index + 1}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a
+            href="#"
+            onClick={(e) => handlePagination(e, currentPage + 1)}
+            className="inline-flex items-center justify-center rounded border border-gray-100"
+          >
+            <span className="sr-only">Next Page</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+            </svg>
+          </a>
+        </li>
+      </ol>
     </div>
   );
 };

@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "../../../../Translator/Provider";
 import ImageUpload from "../../../../CoverPhotoUplod";
+import { Editor } from "@tinymce/tinymce-react";
 
 const StoreForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +29,7 @@ const StoreForm = () => {
     email: string;
     phone: string;
     description: string;
+    content: string;
     location: {
       country: string;
       state: string;
@@ -55,6 +57,8 @@ const StoreForm = () => {
     email: "",
     phone: "",
     description: "",
+    content: "",
+
     location: {
       country: "",
       state: "",
@@ -109,6 +113,11 @@ const StoreForm = () => {
       }));
     }
   };
+
+  const handleEditorChange = (content: string) => {
+    setFormData({ ...formData, content: content });
+  };
+
   const [loading, setLoading] = useState(false); // Define loading state
 
   useEffect(() => {
@@ -237,6 +246,69 @@ const StoreForm = () => {
               className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             />
           </div>
+          {/* Description Field */}
+          <div className="mb-6">
+            <label className="mb-3 block text-black dark:text-white ">
+              Content
+            </label>
+            <Editor
+              apiKey="cdzyxuidujhvhvu1ny9c3znjwloq2i8c1bmgyduqws17pp3i"
+              value={formData.content}
+              init={{
+                height: 300,
+                menubar: false,
+                plugins: [
+                  // Core editing features
+                  "anchor",
+                  "autolink",
+                  "charmap",
+                  "codesample",
+                  "emoticons",
+                  "image",
+                  "link",
+                  "lists",
+                  "media",
+                  "searchreplace",
+                  "table",
+                  "visualblocks",
+                  "wordcount",
+                  // Your account includes a free trial of TinyMCE premium features
+                  // Try the most popular premium features until Nov 7, 2024:
+                  "checklist",
+                  "mediaembed",
+                  "casechange",
+                  "export",
+                  "formatpainter",
+                  "pageembed",
+                  "a11ychecker",
+                  "tinymcespellchecker",
+                  "permanentpen",
+                  "powerpaste",
+                  "advtable",
+                  "advcode",
+                  "editimage",
+                  "advtemplate",
+                  "mentions",
+                  "tableofcontents",
+                  "footnotes",
+                  "mergetags",
+                  "autocorrect",
+                  "typography",
+                  "inlinecss",
+                  "markdown",
+                  // Early access to document converters
+                  "importword",
+                  "exportword",
+                  "exportpdf",
+                ],
+                toolbar:
+                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+                content_css: false, // Use external styling if required
+                body_class: "text-black dark:text-white  dark:bg-form-input", // Apply custom styles to the editor's body
+              }}
+              onEditorChange={handleEditorChange}
+            />
+          </div>
 
           {/* Country and State Fields */}
           <div className="mb-6 grid grid-cols-2 gap-4">
@@ -248,12 +320,12 @@ const StoreForm = () => {
                 name="country"
                 value={formData.location.country}
                 onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0  dark:bg-form-input dark:text-white  py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">{translate("select")}</option>
-                <option value="Grocery">{translate("grocery")}</option>
-                <option value="Electronics">{translate("electronics")}</option>
-                <option value="Clothing">{translate("clothing")}</option>
+                <option value="Tunisia">{translate("Tunisia")}</option>
+                <option value="France">{translate("France")}</option>
+                <option value="Japan">{translate("Japan")}</option>
                 {/* Add more store types as needed */}
               </select>
             </div>
@@ -265,12 +337,12 @@ const StoreForm = () => {
                 name="state"
                 value={formData.location.state}
                 onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full dark:bg-form-input dark:text-white  rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">{translate("select")}</option>
-                <option value="Grocery">{translate("grocery")}</option>
-                <option value="Electronics">{translate("electronics")}</option>
-                <option value="Clothing">{translate("clothing")}</option>
+                <option value="Monastir">{translate("Monastir")}</option>
+                <option value="Tokyo">{translate("Tokyo")}</option>
+                <option value="Lyon">{translate("Lyon")}</option>
                 {/* Add more store types as needed */}
               </select>
             </div>
@@ -467,7 +539,6 @@ const StoreForm = () => {
                   <FaPinterestP />
                 </span>
               </div>
-
               {/* Other */}
               <div className="relative">
                 <input
@@ -479,7 +550,20 @@ const StoreForm = () => {
                   {/* Add any other social media icon */}
                 </span>
               </div>
-              <button type="submit">Submit</button>
+              <div className="flex space-x-4">
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 transition duration-300"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md shadow hover:bg-gray-400 transition duration-300"
+                >
+                  Save and Exit
+                </button>
+              </div>{" "}
             </div>
           </div>
         </div>

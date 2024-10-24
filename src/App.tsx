@@ -7,7 +7,6 @@ import SignUpPage from "./pages/SignUpPage";
 import { AuthProvider } from "./components/UserContext";
 import { ManageStoreProvider } from "./components/SellerDashboard/components/Store/Provider";
 import StorePage from "./pages/StorePage";
-import ConractStorePage from "./pages/buyer/ConractStorePage";
 import { ManageProductProvider } from "./components/Products/Provider";
 import ProductPage from "./pages/buyer/ProductPage";
 import { ToastContainer } from "react-toastify";
@@ -51,7 +50,6 @@ const App: React.FC = () => {
               <Route path="/login" element={<LogInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/store/:storeId" element={<StorePage />} />
-              <Route path="/contactstore" element={<ConractStorePage />} />
 
               <Route path="/product/:id" element={<ProductPage />} />
 

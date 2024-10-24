@@ -3,28 +3,25 @@ const mongoose = require("mongoose");
 const StoreSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
   },
   userId: {
     type: String,
-    required: true,
   },
   name: {
     type: String,
-    required: true,
+  },
+  content: {
+    type: String,
   },
   shopUrl: {
     type: String,
-    required: true,
     unique: true,
   },
   email: {
     type: String,
-    required: true,
   },
   phone: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
@@ -32,19 +29,15 @@ const StoreSchema = new mongoose.Schema({
   location: {
     country: {
       type: String,
-      required: true,
     },
     state: {
       type: String,
-      required: true,
     },
     city: {
       type: String,
-      required: true,
     },
     address: {
       type: String,
-      required: true,
     },
   },
   company: {

@@ -1,29 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
+import NavBar from "../../components/Stores/Header";
 import StoreHeader from "../../components/Store/StoreHeader";
 import TabNavigation from "../../components/Store/TabNavigation";
 import ProductSearchAndCategories from "../../components/Store/ProductSearchAndCategories";
 import StoreProductSection from "../../components/Store/Products";
-import NavBar from "../../components/Stores/Header";
+import AboutTheStore from "../../components/Store/AboutTheStore"; 
+import ConractStore from "../../components/Store/ConractStore";
+import Header from "../../components/Header";
 
 const StorePage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("products"); // Default to products
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case "about":
+        return <AboutTheStore />;
+      case "products":
+        return <StoreProductSection />;
+      case "contact":
+        return <ConractStore/>; 
+      default:
+        return <StoreProductSection />;
+    }
+  };
+
   return (
     <div className="w-full">
-      <NavBar />
-      <StoreHeader /> {/* Full-width header */}
-      {/* Content area */}
+      <Header onCartOpen={function (): void {
+        throw new Error("Function not implemented.");
+      }} />
+      <StoreHeader />
       <div className="container mx-auto">
-        {/* Tabs */}
-        <TabNavigation />
-
+        <TabNavigation setActiveTab={setActiveTab} activeTab={activeTab} />{" "}
         <div className="flex flex-col md:flex-row mt-4">
-          {/* Left Column - Navigation Menu (Categories and Search) */}
-          <div className="w-full md:w-1/4 p-4">
-            <ProductSearchAndCategories />
-          </div>
+          {/* Conditionally render the ProductSearchAndCategories component only for the products tab */}
+          {activeTab === "products" && (
+            <div className="w-full md:w-1/4 p-4">
+              <ProductSearchAndCategories />
+            </div>
+          )}
 
-          {/* Right Column - Product Section */}
-          <div className="w-full md:w-3/4 p-4">
-            <StoreProductSection  />
+          {/* Right Column - Render active tab component */}
+          <div className={`w-full ${activeTab === "products" ? "md:w-3/4" : "md:w-full"} p-4`}>
+            {renderActiveTab()}
           </div>
         </div>
       </div>
