@@ -1,20 +1,13 @@
-import  { useEffect, useState } from "react";
-import { FaBalanceScale, FaEye, FaHeart, FaList, FaThLarge } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import {
+  FaBalanceScale,
+  FaEye,
+  FaHeart,
+  FaList,
+  FaThLarge,
+} from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-
-export type Product = {
-  oldPrice: number;
-  id?: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  stock: number;
-  imageUrl: string;
-  userId?: string;
-  reviewsCount?: string;
-  discountPrice?: string;
-};
+import { Product } from "../Products/ProductsServie";
 
 const Products = () => {
   const [loading, setLoading] = useState(true);
@@ -90,13 +83,17 @@ const Products = () => {
           {/* View Mode Toggle Icons */}
           <button
             onClick={() => setViewMode("grid")}
-            className={`mr-2 p-2 ${viewMode === "grid" ? "text-blue-500" : "text-gray-500"}`}
+            className={`mr-2 p-2 ${
+              viewMode === "grid" ? "text-blue-500" : "text-gray-500"
+            }`}
           >
             <FaThLarge size={20} />
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`p-2 ${viewMode === "list" ? "text-blue-500" : "text-gray-500"}`}
+            className={`p-2 ${
+              viewMode === "list" ? "text-blue-500" : "text-gray-500"
+            }`}
           >
             <FaList size={20} />
           </button>
@@ -147,7 +144,7 @@ const Products = () => {
           >
             <div
               className={`relative group bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl ${
-                viewMode === "list" ? "flex w-full border p-4 mb-4" : "w-full"
+                viewMode === "list" ? "flex w-full border p-2 mb-4" : "w-full"
               }`}
             >
               {/* Image Section */}
@@ -156,15 +153,12 @@ const Products = () => {
                   src={product.imageUrl}
                   alt={product.name}
                   className={`object-cover rounded-t-xl ${
-                    viewMode === "list" ? "w-40 h-40" : "h-80 w-full"
+                    viewMode === "list" ? "w-60 h-60" : "h-80 w-full"
                   }`}
                 />
-                {/* Add to Cart Button */}
-                <button className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white py-2 px-4 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                  Add To Cart
-                </button>
+
                 {/* Hover Icons */}
-                <div className="absolute top-4 right-4 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-4 left-2 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-10 ">
                   <button className="w-8 h-8 bg-white text-gray-600 rounded-full shadow flex items-center justify-center">
                     <FaHeart size={18} />
                   </button>
@@ -176,14 +170,28 @@ const Products = () => {
                   </button>
                 </div>
               </div>
+
               {/* Product Details */}
-              <div className={`p-4 ${viewMode === "list" ? "ml-4" : ""}`}>
+              <div
+                className={`p-4 flex-grow ${viewMode === "list" ? "ml-4" : ""}`}
+              >
                 <span className="text-gray-400 uppercase text-xs">
                   {product.category}
                 </span>
                 <p className="text-lg font-bold text-black truncate capitalize">
                   {product.name}
                 </p>
+
+                {/* Reviews Section */}
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center">
+                    {/* Replace the stars and reviews with your own component if needed */}
+                    <span className="text-yellow-400">★★★★☆</span>
+                    <p className="text-sm text-gray-600 ml-2">(10 reviews)</p>
+                  </div>
+                </div>
+
+                {/* Price Section */}
                 <div className="flex items-center">
                   <p className="text-lg font-semibold text-black my-3">
                     ${product.price}
@@ -194,9 +202,17 @@ const Products = () => {
                     </del>
                   )}
                 </div>
+
                 <p className="text-gray-500 text-sm truncate">
                   {product.description}
                 </p>
+
+                {/* Add to Cart Button */}
+                <div className="mt-4">
+                  <button className="bg-blue-500 text-white py-2 px-4 rounded-md">
+                    Add To Cart
+                  </button>
+                </div>
               </div>
             </div>
           </Link>

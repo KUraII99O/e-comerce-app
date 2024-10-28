@@ -8,7 +8,7 @@ const StoreList = () => {
     const [packageData, setPackageData] = useState<Store[]>([]);
     const [loading, setLoading] = useState(true); // State to manage loading status
   const [error, setError] = useState<string | null>(null); // State to manage errors
-  const { stores, deleteStore } = useManageStore();
+  const { deleteStore } = useManageStore();
 
   // Function to fetch stores
   const fetchStores = async () => {

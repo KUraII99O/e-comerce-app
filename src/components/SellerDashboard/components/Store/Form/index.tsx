@@ -118,7 +118,7 @@ const StoreForm = () => {
     setFormData({ ...formData, content: content });
   };
 
-  const [loading, setLoading] = useState(false); // Define loading state
+  const [, setLoading] = useState(false); // Define loading state
 
   useEffect(() => {
     if (isEditMode && id && stores?.length > 0) {

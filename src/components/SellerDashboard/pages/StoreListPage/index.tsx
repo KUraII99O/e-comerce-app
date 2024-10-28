@@ -1,4 +1,3 @@
-import React from 'react'
 import StoreList from '../../components/Store/List'
 
 const StoreListPage = () => {

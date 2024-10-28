@@ -4,6 +4,7 @@ const StoreSchema = new mongoose.Schema({
   id: {
     type: String,
   },
+  
   userId: {
     type: String,
   },

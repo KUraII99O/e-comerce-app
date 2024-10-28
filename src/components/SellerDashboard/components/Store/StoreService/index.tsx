@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export type Store = {
   id: string; // MongoDB id is usually handled internally, you may want to keep this or remove it if using _id instead
-  userId: string; // Refers to the user who owns the store
+  userId: string; 
   name: string; // Matches the 'name' field in the schema
   shopUrl: string; // Matches the 'shopUrl' field in the schema
   email: string; // Matches the 'email' field in the schema

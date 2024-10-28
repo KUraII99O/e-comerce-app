@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import NavBar from "../../components/Stores/Header";
 import StoreHeader from "../../components/Store/StoreHeader";
 import TabNavigation from "../../components/Store/TabNavigation";
 import ProductSearchAndCategories from "../../components/Store/ProductSearchAndCategories";
